@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>St. Joseph River Historic Monitoring Sites</title>
+
+  <!-- Load Leaflet from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
+  <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js"></script>
+
+  <style>
+    body { margin:0; padding:0; }
+    #map {
+      position: absolute;
+      top:0;
+      bottom:0;
+      right:0;
+      left:0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      color: #323232;
+    }
+
+    .label {
+      text-align: center;
+      margin-top: -1em;
+
+      size: 12px;
+      line-height: 12px;
+      font-family: "Noto Sans";
+      font-style: italic;
+    }
+
+    .label div {
+      position: relative;
+      left: -50%;
+      top: 20px;
+      width: 500px;
+      text-shadow: 0px 2px 1px rgba(255,255,255,0.85);
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <script>
+    function clg(o) {
+      console.log(o);
+    }
+  
+    const featureService = "https://services1.arcgis.com/fe2kKd3pQJKqve16/arcgis/rest/services/HistoricMonitoringSites/FeatureServer/0";
+
+    const apiKey = "AAPK9eba4a75d9184c09bb8cc5ac9f5c2f6dhOf7RmbLAI-sUhd--0MgbkUSZ13YifOiPplRIjLHFRGi32oQSfh1Y1g9IHqEVYPB";
+    const basemapEnum = "ArcGIS:Topographic";
+
+    const map = L.map("map", {
+      minZoom: 2
+    }).setView([41.55,-85.4], 10);
+
+    window.map = map;
+
+    L.esri.Vector.vectorBasemapLayer(basemapEnum, {
+      apiKey: apiKey
+    }).addTo(map);
+
+
+
+    // Style trailheads (points)
+    const icon = L.icon({
+      iconUrl: "http://static.arcgis.com/images/Symbols/NPS/npsPictograph_0231b.png",
+      iconSize: [18, 18]
+    });
+
+    const trailheads = L.esri.featureLayer({
+      url: featureService,
+      pointToLayer: (geojson, latlng) => {
+        clg(geojson);
+        return L.circleMarker(latlng, {
+          color: "purple",
+          stroke: false,
+          fillOpacity: 0.9,
+          radius: Math.random() * 10
+        });
+      }
+    }).addTo(map);
+
+  </script>
+
+</body>
+
+</html>
