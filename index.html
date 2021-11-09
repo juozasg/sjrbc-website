@@ -54,13 +54,13 @@
 
     #data {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 240px;
+      bottom: 12px;
+      left: 12px;
+      width: 264px;
       height: 600px;
-      background-color: white;
-      border: 1px solid #AAA;
-      border-bottom: none;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+      border-radius: 5px;
       z-index: 10000;
     }
 
@@ -92,7 +92,6 @@
 </head>
 
 <body>
-
   <main>
     <div id="data">
       <h3>Data Source</h3>
@@ -104,10 +103,8 @@
 
       <div class="flex-center data-selector" id="physical-selector">
         <button id="turbidity">Turbidity</button>
-      </div>
-
-      <div class="flex-center data-selector" id="physical-selector">
         <button id="gageflow">Gage Flow</button>
+
       </div>
 
 
