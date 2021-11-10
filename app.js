@@ -18,14 +18,14 @@ function featureMinMax(prop) {
 
 function initVars() {
   // make sure the pH scale never starts at anything larger than 6
-  const phmm = featureMinMax('pH');
-  const phmin = Math.min(6.5, phmm[0]);
-  const phmax = phmm[1];
+  // const phmm = featureMinMax('pH');
+  // const phmin = Math.min(6.5, phmm[0]);
+  // const phmax = phmm[1];
 
   App.vars = {
     ph: {
       prop: 'pH',
-      scale: d3.scaleDiverging([phmin, 7, phmax], d3.interpolatePRGn)
+      scale: d3.scaleSequential(featureMinMax('pH'), d3.interpolateViridis)
     },
     turbidity: {
       prop: 'Turbidity',
@@ -57,8 +57,8 @@ async function initApp() {
     registerDataVariable(key);
   }
 
-  $('#physical').click();
-  $('#turbidity').click();
+  $('#chemical').click();
+  $('#ph').click();
 
   // show display after things load to make it look nicer
   $('#ui').css('display', 'flex');

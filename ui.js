@@ -1,25 +1,11 @@
-
-// scaleToStyle('ph')
-
 const radiusRange = [5, 20]
-
-function linearDomain(variable) {
-  const v = App.vars[variable];
-  // [min, max] for continuous scale
-  // [min, center, max] for divergent scales like ph
-  // linearDomain = [min, max]
-  const domain = v.scale.domain();
-  const linearDomain = [domain[0], domain.slice(-1)[0]];
-
-  return linearDomain;
-}
 
 function scaleToStyle(variable) {
   return (feature) => {
     const v = App.vars[variable];
     const val = feature.properties[v.prop];
     const color = v.scale(val);
-    const radius = d3.scaleLinear().domain(linearDomain(variable)).range(radiusRange)(val);
+    const radius = v.scale.copy().range(radiusRange)(val)
 
     return {
       fillColor: color,
@@ -32,6 +18,38 @@ function scaleToStyle(variable) {
   }
 }
 
+function buildRadiusLegend(variable) {
+  const width = 228;
+  const x0 = 18;
+  const height = 60;
+  const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height])
+    .style("overflow", "visible")
+    .style("display", "block");
+
+    const v = App.vars[variable];
+    const scaleColor = v.scale.copy().domain([0, 1]);
+    const scaleRadius = scaleColor.copy().range(radiusRange);
+
+    [10, 50, 95, 150, 208].forEach((x, i) => {
+      let v = x/228;
+      let r = scaleRadius(v);
+      let cx = x0 + x;
+      clg([i, v, cx])
+      svg.append("circle")
+      .attr("cx", cx)
+      .attr("cy", 30)
+      .attr("r", r)
+      .attr("fill", scaleColor(v))
+      .attr("stroke", "black")
+      .attr("stroke-width", "2");
+    });
+
+    return svg.node();
+}
+
 function replaceLegend(variable) {
   $('svg.legend').remove();
 
@@ -40,11 +58,17 @@ function replaceLegend(variable) {
     title: label,
     width: 264,
     marginLeft: 18,
-    marginRight: 18
+    marginRight: 18,
+    ticks: 7
   });
-  legendSvg.setAttribute('class', 'legend');
 
+  legendSvg.setAttribute('class', 'legend');
   $('#legendviz').append(legendSvg);
+
+  // radius legend
+  const rLegendSvg = buildRadiusLegend(variable);
+  rLegendSvg.setAttribute('class', 'legend');
+  $('#legendviz').append(rLegendSvg);
 }
 
 function registerCategory(item) {
