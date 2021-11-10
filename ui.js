@@ -1,18 +1,25 @@
 
 // scaleToStyle('ph')
+
+const radiusRange = [5, 20]
+
+function linearDomain(variable) {
+  const v = App.vars[variable];
+  // [min, max] for continuous scale
+  // [min, center, max] for divergent scales like ph
+  // linearDomain = [min, max]
+  const domain = v.scale.domain();
+  const linearDomain = [domain[0], domain.slice(-1)[0]];
+
+  return linearDomain;
+}
+
 function scaleToStyle(variable) {
   return (feature) => {
     const v = App.vars[variable];
     const val = feature.properties[v.prop];
     const color = v.scale(val);
-
-    // [min, max] for continuous scale
-    // [min, center, max] for divergent scales like ph
-    // linearDomain = [min, max]
-    const domain = v.scale.domain()
-    const linearDomain = [domain[0], domain.slice(-1)[0]]
-
-    const radius = d3.scaleLinear().domain(linearDomain).range([5, 20])(val);
+    const radius = d3.scaleLinear().domain(linearDomain(variable)).range(radiusRange)(val);
 
     return {
       fillColor: color,
