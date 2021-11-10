@@ -49,7 +49,7 @@ function Legend(color, {
         .attr("width", width - marginLeft - marginRight)
         .attr("height", height - marginTop - marginBottom)
         .attr("preserveAspectRatio", "none")
-        .attr("xlink:href", ramp(color.copy().domain(d3.quantize(d3.interpolate(0, 1), n))).toDataURL());
+        .attr("href", ramp(color.copy().domain(d3.quantize(d3.interpolate(0, 1), n))).toDataURL());
   }
 
   // Sequential
@@ -64,7 +64,7 @@ function Legend(color, {
         .attr("width", width - marginLeft - marginRight)
         .attr("height", height - marginTop - marginBottom)
         .attr("preserveAspectRatio", "none")
-        .attr("xlink:href", ramp(color.interpolator()).toDataURL());
+        .attr("href", ramp(color.interpolator()).toDataURL());
 
     // scaleSequentialQuantile doesn’t implement ticks or tickFormat.
     if (!x.ticks) {
