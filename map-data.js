@@ -20,13 +20,12 @@ function loadMapData() {
     }
   }).addTo(App.map);
 
-  
+
   return new Promise((resolve) => {
-    App.featureLayer.on('load', () => { 
+    App.featureLayer.on('load', () => {
       App.features = [];
       App.featureLayer.eachFeature((t) => {App.features.push(t.feature)});
       resolve();
     });
   });
-
 }

@@ -137,10 +137,10 @@ function Legend(color, {
       .call(tickAdjust)
       .call(g => g.select(".domain").remove())
       .call(g => g.append("text")
-        .attr("x", marginLeft)
-        .attr("y", marginTop + marginBottom - height - 6)
+        .attr("x", width/2)
+        .attr("y", marginTop + marginBottom - height - 12)
         .attr("fill", "currentColor")
-        .attr("text-anchor", "start")
+        .attr("text-anchor", "middle")
         .attr("font-weight", "bold")
         .attr("class", "title")
         .text(title));

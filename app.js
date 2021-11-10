@@ -1,9 +1,14 @@
 globalThis.App = {}
 
+function clg(o) {
+  console.log(o);
+}
+
 // featureMinMaxInt('pH') = [7, 9]
 function featureMinMaxInt(prop) {
   const vals = App.features.map((f) => f.properties[prop]);
-  return [Math.floor(d3.min(vals)), Math.ceil(d3.max(vals))];
+  const min = Math.min(0, Math.floor(d3.min(vals)));
+  return [min, Math.ceil(d3.max(vals))];
 }
 
 function featureMinMax(prop) {
@@ -19,19 +24,21 @@ function initVars() {
 
   App.vars = {
     ph: {
-      prop: 'pH', 
+      prop: 'pH',
       scale: d3.scaleDiverging([phmin, 7, phmax], d3.interpolatePRGn)
     },
     turbidity: {
-      prop: 'Turbidity', 
+      prop: 'Turbidity',
+      label: 'Turbidity (NTU)',
       scale: d3.scaleSequential(featureMinMaxInt('Turbidity'), d3.interpolateBlues)
     },
     ecoli: {
-      prop: 'Escherichi', 
+      prop: 'Escherichi',
+      label: 'Escherichia coli',
       scale: d3.scaleSequential(featureMinMaxInt('Escherichi'), d3.interpolateOranges)
     },
     nitrate: {
-      prop: 'Nitrate_Ni', 
+      prop: 'Nitrate_Ni',
       scale: d3.scaleSequential(featureMinMaxInt('Nitrate_Ni'), d3.interpolateRdPu)
     }
   }
@@ -42,28 +49,19 @@ async function initApp() {
 
   initVars();
 
-  const legendSvg = Legend(App.vars.ph.scale, {
-    title: "pH",
-    width: 264,
-    marginLeft: 18,
-    marginRight: 18
-  });
-  
-  $('#dataviz').append(legendSvg);
-
-  
   registerCategory('physical');
   registerCategory('biological');
   registerCategory('chemical');
 
-
   for (const [key, value] of Object.entries(App.vars)) {
     registerDataVariable(key);
   }
-  
 
-  $('#chemical').click();
+  $('#physical').click();
   $('#turbidity').click();
+
+  // show display after things load to make it look nicer
+  $('#ui').css('display', 'flex');
 }
 
 $(document).ready(() => { initApp(); })

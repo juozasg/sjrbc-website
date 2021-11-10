@@ -29,35 +29,36 @@
   <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js" crossorigin=""></script>
 </head>
 
-<body>pre
+<body>
   <main>
-    <div id="data">
-      <h3>Data Source</h3>
-      <div class="flex-center category-selector">
-        <button id="physical">Physical</button>
-        <button id="biological">Biological</button>
-        <button id="chemical">Chemical</button>
+    <div id="ui" style="display: none;">
+      <div id="filters">
+        <h3>Data Source</h3>
+        <div class="flex-center category-selector">
+          <button id="physical">Physical</button>
+          <button id="biological">Biological</button>
+          <button id="chemical">Chemical</button>
+        </div>
+
+        <div class="flex-center data-selector" id="physical-selector">
+          <button id="turbidity">Turbidity</button>
+          <button id="gageflow" disabled>Gage Flow</button>
+
+        </div>
+
+
+        <div class="flex-center data-selector" id="biological-selector">
+          <button id="ecoli">E. Coli</button>
+        </div>
+
+        <div class="flex-center data-selector" id="chemical-selector">
+          <button id="nitrate">Nitrate</button>
+          <button id="ph">pH</button>
+        </div>
+
+        <div id="legendviz" height=200 width=264></div>
       </div>
-
-      <div class="flex-center data-selector" id="physical-selector">
-        <button id="turbidity">Turbidity</button>
-        <button id="gageflow" disabled>Gage Flow</button>
-
-      </div>
-
-
-      <div class="flex-center data-selector" id="biological-selector">
-        <button id="ecoli">E. Coli</button>
-      </div>
-
-      <div class="flex-center data-selector" id="chemical-selector">
-        <button id="nitrate">Nitrate</button>
-        <button id="ph">pH</button>
-      </div>
-
-      <h3>Legend</h3>
-
-      <div id="dataviz" height=200 width=264></div>
+      <div id="dataview"></div>
 
     </div>
     <div id="map"></div>
