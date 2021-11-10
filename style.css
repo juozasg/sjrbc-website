@@ -54,6 +54,12 @@ button {
   margin: 0 3px;
 }
 
+button.active {
+  font-weight: 600;
+  color: white;
+  background-color: #323232;
+}
+
 .data-selector {
   margin-top: 1rem;
   display: none;

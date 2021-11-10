@@ -25,23 +25,23 @@
   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
   crossorigin=""></script>
 
-  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
-  <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js"></script>
+  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js" crossorigin=""></script>
 </head>
 
 <body>pre
   <main>
     <div id="data">
       <h3>Data Source</h3>
-      <div class="flex-center">
+      <div class="flex-center category-selector">
         <button id="physical">Physical</button>
         <button id="biological">Biological</button>
         <button id="chemical">Chemical</button>
       </div>
 
       <div class="flex-center data-selector" id="physical-selector">
-        <button id="turbidity" disabled>Turbidity</button>
-        <button id="gageflow">Gage Flow</button>
+        <button id="turbidity">Turbidity</button>
+        <button id="gageflow" disabled>Gage Flow</button>
 
       </div>
 
@@ -57,12 +57,14 @@
 
       <h3>Legend</h3>
 
-      <svg id="dataviz" height=200 width=264></svg>
+      <div id="dataviz" height=200 width=264></div>
 
     </div>
     <div id="map"></div>
   </main>
 
+  <script src="map.js"></script>
+  <script src="utils.js"></script>
   <script src="app.js"></script>
 
 </body>
