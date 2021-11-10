@@ -7,7 +7,7 @@ function clg(o) {
 function scaleToStyle(variable) {
   return (feature) => {
     const v = App.vars[variable];
-    const val = feature.properties[v.field];
+    const val = feature.properties[v.prop];
     const color = v.scale(val);
     const radius = d3.scaleLinear().domain(v.scale.domain()).range([5, 20])(val);
 

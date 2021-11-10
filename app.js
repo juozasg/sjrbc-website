@@ -1,27 +1,47 @@
 globalThis.App = {}
 
-// App.featureLayer.eachFeature((t, e) => {clg(t.feature.properties)})
-// name = $('#ph').text()
-App.vars = {
-  ph: {
-    field: 'pH', 
-    scale: d3.scaleSequential([6, 8], d3.interpolatePRGn)
-  },
-  turbidity: {
-    field: 'Turbidity', 
-    scale: d3.scaleSequential([0, 50], d3.interpolateBlues)
-  },
-  ecoli: {
-    field: 'Escherichi', 
-    scale: d3.scaleSequential([0, 2000], d3.interpolateOranges)
-  },
-  nitrate: {
-    field: 'Nitrate_Ni', 
-    scale: d3.scaleSequential([0, 5], d3.interpolateRdPu)
+// featureMinMaxInt('pH') = [7, 9]
+function featureMinMaxInt(prop) {
+  const vals = App.features.map((f) => f.properties[prop]);
+  return [Math.floor(d3.min(vals)), Math.ceil(d3.max(vals))];
+}
+
+function featureMinMax(prop) {
+  const vals = App.features.map((f) => f.properties[prop]);
+  return [d3.min(vals), d3.max(vals)];
+}
+
+function initVars() {
+  // make sure the pH scale never starts at anything larger than 6
+  const phmm = featureMinMax('pH');
+  const phmin = Math.min(6.5, phmm[0]);
+  const phmax = phmm[1];
+
+  App.vars = {
+    ph: {
+      prop: 'pH', 
+      scale: d3.scaleDiverging([phmin, 7, phmax], d3.interpolatePRGn)
+    },
+    turbidity: {
+      prop: 'Turbidity', 
+      scale: d3.scaleSequential(featureMinMaxInt('Turbidity'), d3.interpolateBlues)
+    },
+    ecoli: {
+      prop: 'Escherichi', 
+      scale: d3.scaleSequential(featureMinMaxInt('Escherichi'), d3.interpolateOranges)
+    },
+    nitrate: {
+      prop: 'Nitrate_Ni', 
+      scale: d3.scaleSequential(featureMinMaxInt('Nitrate_Ni'), d3.interpolateRdPu)
+    }
   }
 }
 
 async function initApp() {
+  await loadMapData();
+
+  initVars();
+
   const legendSvg = Legend(App.vars.ph.scale, {
     title: "pH",
     width: 264,
@@ -30,15 +50,7 @@ async function initApp() {
   });
   
   $('#dataviz').append(legendSvg);
-  
-  
-  await loadMapData();
 
-  clg(App.features);
-  // App.featureLayer.on('load', () => { 
-    // App.featureLayer.eachFeature((t, e) => {clg(t.feature)});
-  // });
-  
   
   registerCategory('physical');
   registerCategory('biological');
