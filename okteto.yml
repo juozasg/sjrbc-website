@@ -6,3 +6,7 @@ sync:
 - www:/var/www/html
 forward:
 - 8080:80
+image:
+  name: okteto.dev/supervisord-nginx:latest
+  context: .
+  dockerfile: Dockerfile
