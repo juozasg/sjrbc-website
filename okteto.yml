@@ -7,6 +7,6 @@ sync:
 forward:
 - 8080:80
 image:
-  name: okteto.dev/supervisord-nginx:latest
+  name: docker.io/kingdonb/supervisord-nginx:b8e28dce
   context: .
   dockerfile: Dockerfile
