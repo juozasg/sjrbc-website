@@ -1,0 +1,7 @@
+Dockerfile
+k8s.yml
+okteto.yml
+
+.dockerignore
+.stignore
+

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: supervisord
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supervisord
+  template:
+    metadata:
+      labels:
+        app: supervisord
+    spec:
+      containers:
+      - image: docker.io/kingdonb/supervisord-nginx:b8e28dce
+        name: supervisord
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: supervisord
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP  
+  ports:
+  - name: nginx-http
+    port: 8080
+    targetPort: 80
+  selector:
+    app: supervisord
