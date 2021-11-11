@@ -15,6 +15,8 @@ spec:
       containers:
       - image: docker.io/kingdonb/supervisord-nginx:b8e28dce
         name: supervisord
+        ports:
+        - containerPort: 80
 
 ---
 
@@ -27,7 +29,8 @@ metadata:
 spec:
   type: ClusterIP  
   ports:
-  - name: "supervisord"
+  - name: nginx-http
     port: 8080
+    targetPort: 80
   selector:
     app: supervisord
