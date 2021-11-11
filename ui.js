@@ -37,7 +37,6 @@ function buildRadiusLegend(variable) {
       let v = x/228;
       let r = scaleRadius(v);
       let cx = x0 + x;
-      clg([i, v, cx])
       svg.append("circle")
       .attr("cx", cx)
       .attr("cy", 30)

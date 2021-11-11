@@ -32,6 +32,11 @@ function initVars() {
       label: 'Turbidity (NTU)',
       scale: d3.scaleSequential(featureMinMaxInt('Turbidity'), d3.interpolateBlues)
     },
+    temp: {
+      prop: 'Temp',
+      label: 'Temperature (C)',
+      scale: d3.scaleSequential(featureMinMaxInt('Temp'), d3.interpolateYlOrRd)
+    },
     ecoli: {
       prop: 'Escherichi',
       label: 'Escherichia coli',
@@ -62,6 +67,11 @@ async function initApp() {
 
   // show display after things load to make it look nicer
   $('#ui').css('display', 'flex');
+
+  loadUSGSData().then(() => {
+    // $('#gageflow').prop("disabled", false);
+    // $('#gageheight').prop("disabled", false);
+  });
 }
 
 $(document).ready(() => { initApp(); })

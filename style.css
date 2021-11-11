@@ -95,6 +95,15 @@ button.active {
 .data-selector {
   margin-top: 1rem;
   display: none;
+  max-width: 250px;
+  flex-wrap: wrap;
+  height: 80px;
+  align-content: center;
+}
+
+.data-selector button {
+  height: 24px;
+  margin-top: 20px;
 }
 
 #physical-selector {
