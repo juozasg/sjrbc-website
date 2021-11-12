@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sjrbc
+  name: supervisord
 spec:
   replicas: 1
   selector:
@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: supervisord
+  name: sjrbc
   annotations:
     dev.okteto.com/auto-ingress: "true"
 spec:
