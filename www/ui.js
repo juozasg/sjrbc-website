@@ -3,7 +3,11 @@ const radiusRange = [5, 20]
 function scaleToStyle(variable) {
   return (feature) => {
     const v = App.vars[variable];
-    const val = feature.properties[v.prop];
+    let val = feature.properties[v.prop];
+    if(variable == "datainfo" && val === undefined) {
+      val = 30;
+    }
+
     const color = v.scale(val);
     const radius = v.scale.copy().range(radiusRange)(val)
 
@@ -15,6 +19,12 @@ function scaleToStyle(variable) {
       fillOpacity: 0.9,
       radius: radius
     }
+  }
+}
+
+function hideStyle() {
+  return (feature) => {
+    return {fillOpacity:0, stroke: false};
   }
 }
 
@@ -83,9 +93,21 @@ function registerCategory(item) {
 function registerDataVariable(variable) {
   const button = $(`#${variable}`);
   button.click((e) => {
-    $('.data-selector button').removeClass('active');
+    $('#filters *').removeClass('active');
     button.addClass('active');
-    App.featureLayer.setStyle(scaleToStyle(variable));
+    // button.parents('active');
+
+    if(variable == 'datainfo') {
+      App.featureLayer.setStyle(scaleToStyle(variable));
+      App.usgsFeatureLayer.setStyle(scaleToStyle(variable));
+    } else if(App.vars[variable].usgs) {
+        App.usgsFeatureLayer.setStyle(scaleToStyle(variable));
+        App.featureLayer.setStyle(hideStyle());
+    } else {
+      App.featureLayer.setStyle(scaleToStyle(variable));
+      App.usgsFeatureLayer.setStyle(hideStyle());
+    }
+
     replaceLegend(variable);
   })
 }

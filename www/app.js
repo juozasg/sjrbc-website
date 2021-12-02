@@ -6,13 +6,18 @@ function clg(o) {
 
 // featureMinMaxInt('pH') = [7, 9]
 function featureMinMaxInt(prop) {
-  const vals = App.features.map((f) => f.properties[prop]);
+  const vals = App.features.map((f) => parseInt(f.properties[prop]));
   const min = Math.min(0, Math.floor(d3.min(vals)));
   return [min, Math.ceil(d3.max(vals))];
 }
 
 function featureMinMax(prop) {
-  const vals = App.features.map((f) => f.properties[prop]);
+  const vals = App.features.map((f) => parseFloat(f.properties[prop]));
+  return [d3.min(vals), d3.max(vals)];
+}
+
+function usgsFeatureMinMax(prop) {
+  const vals = App.usgsFeatures.map((f) => parseInt(f.properties[prop]));
   return [d3.min(vals), d3.max(vals)];
 }
 
@@ -23,8 +28,14 @@ function initVars() {
   // const phmax = phmm[1];
 
   App.vars = {
+    datainfo: {
+      prop: 'LastMeasurement',
+      label: "Last Measurement (days)",
+      scale: d3.scaleSequential([90, 0], d3.interpolateCividis)
+    },
     ph: {
       prop: 'pH',
+      label: 'pH',
       scale: d3.scaleSequential(featureMinMax('pH'), d3.interpolateViridis)
     },
     turbidity: {
@@ -44,33 +55,47 @@ function initVars() {
     },
     nitrate: {
       prop: 'Nitrate_Ni',
+      label: 'Nitrate',
       scale: d3.scaleSequential(featureMinMaxInt('Nitrate_Ni'), d3.interpolateRdPu)
-    }
+    },
+    flow: {
+      label: 'Flow (cubic ft)',
+      prop: 'Flow',
+      scale: d3.scaleSequentialLog(usgsFeatureMinMax('Flow'), d3.interpolatePuBu),
+      // scale: d3.scaleSqrt([0, 5000], d3.interpolatePuBu),
+      usgs: true
+    },
+    height: {
+      label: 'Height (ft)',
+      prop: 'Height',
+      scale: d3.scaleSequential(usgsFeatureMinMax('Height'), d3.interpolateGnBu),
+      usgs: true
+    },
   }
 }
 
 async function initApp() {
+  var elems = document.querySelectorAll('.dropdown-trigger');
+  var instances = M.Dropdown.init(elems, {constrainWidth: false});
+
   await loadMapData();
-
-  initVars();
-
-  registerCategory('physical');
-  registerCategory('biological');
-  registerCategory('chemical');
-
-  for (const [key, value] of Object.entries(App.vars)) {
-    registerDataVariable(key);
-  }
-
-  $('#chemical').click();
-  $('#ph').click();
 
   // show display after things load to make it look nicer
   $('#ui').css('display', 'flex');
 
   loadUSGSData().then(() => {
+    clg("Data loaded");
     // $('#gageflow').prop("disabled", false);
     // $('#gageheight').prop("disabled", false);
+    initVars();
+
+    for (const [key, value] of Object.entries(App.vars)) {
+      registerDataVariable(key);
+    }
+
+    $('#datainfo').click();
+    // $('#flow').click();
+
   });
 }
 

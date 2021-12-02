@@ -27,6 +27,8 @@ async function loadUSGSData() {
     stations[siteCode]['properties'] ||= {}
     stations[siteCode]['properties']['Name'] = ts.sourceInfo.siteName;
     stations[siteCode]['properties']['Id'] = siteCode;
+    // TODO: real data
+    stations[siteCode]['properties']['LastMeasurement'] = 0;
 
     if(ts.variable.variableCode[0].value == '00060') {
       // Streamflow ft/s
@@ -44,6 +46,10 @@ async function loadUSGSData() {
     features: App.usgsFeatures
   };
 
-  L.geoJSON(featureCollection).addTo(App.map);
+  App.usgsFeatureLayer = L.geoJSON(featureCollection,{
+    pointToLayer: (p, latlng) => {
+      return L.circleMarker(latlng);
+    }
+  }).addTo(App.map);
 }
 

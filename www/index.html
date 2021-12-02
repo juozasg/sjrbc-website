@@ -8,6 +8,16 @@
 
   <link link rel="stylesheet" href="style.css"/>
 
+  <!-- Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+          
   <!-- Load Leaflet from CDN -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -31,37 +41,59 @@
 
 <body>
   <main>
-    <div id="ui" style="display: none;">
+    <div class="card" id="ui" style="display: none;">
       <div id="filters">
-        <h3>Data Source</h3>
-        <div class="flex-center category-selector">
-          <button id="physical">Physical</button>
-          <button id="biological">Biological</button>
-          <button id="chemical">Chemical</button>
-        </div>
+        <!-- <h5>Data Source</h5> -->
+
+        <button class="btn waves-effect waves-light" id="datainfo">Data Info</button>
+
+        <ul id="gage" class="dropdown-content">
+          <li><a id="flow" href="#!">Flow (cu ft/s)</a></li>
+          <li><a id="height" href="#!">Height (ft)</a></li>
+        </ul>
+        <a class="btn dropdown-trigger" href="#!" data-target="gage">Gage<i class="material-icons right">arrow_drop_down</i></a>
+
+        <ul id="env" class="dropdown-content">
+          <li><a href="#!" id="turbidity">Turbidity</a></li>
+          <li><a href="#!" id="temp">Temperature</a></li>
+          <li class="divider" tabindex="-1"></li>
+          <li><a href="#!" id="ecoli">E. Coli</a></li>
+          <li class="divider" tabindex="-1"></li>
+          <li><a href="#!" id="nitrate">Nitrate</a></li>
+          <li><a href="#!" id="ph">pH</a></li>
+        </ul>
+        <a class="btn dropdown-trigger" href="#!" data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
+
+        
+
+
+<!--           
+          <button class="btn waves-effect waves-light" id="biological">Biological</button>
+          <button class="btn waves-effect waves-light" id="chemical">Chemical</button>
+
 
         <div class="flex-center data-selector" id="physical-selector">
-          <button id="turbidity">Turbidity</button>
-          <button id="temp">Temperature</button>
-          <button id="gageflow" disabled>Gage Flow</button>
-          <button id="gageheight" disabled>Gage Height</button>
-
+          <button class="btn waves-effect waves-light" id="turbidity">Turbidity</button>
+          <button class="btn waves-effect waves-light" id="temp">Temperature</button>
+          <button class="btn waves-effect waves-light" id="gageflow" disabled>Gage Flow</button>
+          <button class="btn waves-effect waves-light" id="gageheight" disabled>Gage Height</button>
         </div>
 
         <div class="flex-center data-selector" id="biological-selector">
-          <button id="ecoli">E. Coli</button>
+          <button class="btn waves-effect waves-light" id="ecoli">E. Coli</button>
         </div>
 
         <div class="flex-center data-selector" id="chemical-selector">
-          <button id="nitrate">Nitrate</button>
-          <button id="ph">pH</button>
-        </div>
+          <button class="btn waves-effect waves-light" id="nitrate">Nitrate</button>
+          <button class="btn waves-effect waves-light" id="ph">pH</button>
+        </div> -->
 
-        <div id="legendviz" height=200 width=264></div>
       </div>
-      <div id="dataview"></div>
 
+
+      <div id="legendviz" height=200 width=264></div>
     </div>
+
     <div id="map"></div>
   </main>
 
