@@ -78,6 +78,9 @@ async function initApp() {
   var elems = document.querySelectorAll('.dropdown-trigger');
   var instances = M.Dropdown.init(elems, {constrainWidth: false});
 
+  var elems = document.querySelectorAll('.modal');
+  App.modal = M.Modal.init(elems, {})[0];
+
   await loadMapData();
 
   // show display after things load to make it look nicer

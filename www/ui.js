@@ -22,6 +22,38 @@ function scaleToStyle(variable) {
   }
 }
 
+function infoBox(feature) {
+  clg(feature);
+
+  $('.modal h4').text(feature.properties.Name);
+  // $('.modal pre').text(JSON.stringify(feature.properties)
+  //   .replaceAll(",", "\n")
+  //   .replaceAll("{", "")
+  //   .replaceAll("}", "")
+  //   .replaceAll("\"", "")
+  //   .replaceAll(":", "\t\t\t\t")
+  //   );
+
+  var html = "";
+  for (k in feature.properties) {
+    var val = feature.properties[k];
+    if (val == null) {
+      val = ""
+    }
+    var tr = "<tr>";
+
+    /* Must not forget the $ sign */
+    tr += "<td>" + k + "</td>" + "<td>" + val.toString() + "</td></tr>";
+
+    /* We add the table row to the table body */
+    html += tr;
+  }
+
+  $('.modal tbody').html(html);
+
+  App.modal.open();
+}
+
 function hideStyle() {
   return (feature) => {
     return {fillOpacity:0, stroke: false};

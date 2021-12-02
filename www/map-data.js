@@ -16,7 +16,7 @@ async function loadMapData() {
   App.featureLayer = L.esri.featureLayer({
     url: featureService,
     pointToLayer: (p, latlng) => {
-      return L.circleMarker(latlng);
+      return L.circleMarker(latlng).on('click', () => infoBox(p));
     }
   }).addTo(App.map);
 

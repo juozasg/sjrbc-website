@@ -48,7 +48,7 @@ async function loadUSGSData() {
 
   App.usgsFeatureLayer = L.geoJSON(featureCollection,{
     pointToLayer: (p, latlng) => {
-      return L.circleMarker(latlng);
+      return L.circleMarker(latlng).on('click', () => infoBox(p));
     }
   }).addTo(App.map);
 }
