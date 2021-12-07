@@ -6,37 +6,10 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>St. Joseph River Historic Monitoring Sites</title>
 
-  <link link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="app/main.scss" />
+  <script type="module" src="app/index.js"></script>
 
-  <!-- Materialize CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-  <!-- Materialize JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-  <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-          
-  <!-- Load Leaflet from CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin=""/>
-
-  <!-- jQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-  <!-- d3 CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="d3-legend.js"></script>
-
-  <!-- Leaflet CDN -->
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-  crossorigin=""></script>
-
-  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js" crossorigin=""></script>
-  <script src="https://unpkg.com/esri-leaflet-vector@3.0.0/dist/esri-leaflet-vector.js" crossorigin=""></script>
 </head>
 
 <body>
@@ -63,17 +36,12 @@
           <li><a href="#!" id="ph">pH</a></li>
         </ul>
         <a class="btn dropdown-trigger" href="#!" data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
-
       </div>
-
 
       <div id="legendviz" height=200 width=264></div>
     </div>
 
-    <div id="map"></div>
-
-      <!-- Modal Trigger -->
-  <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+  <div id="map"></div>
 
   <!-- Modal Structure -->
   <div id="modal1" class="modal">
@@ -88,13 +56,7 @@
     </div>
   </div>
 
-
   </main>
-
-  <script src="app.js"></script>
-  <script src="map-data.js"></script>
-  <script src="usgs-data.js"></script>
-  <script src="ui.js"></script>
 
 </body>
 

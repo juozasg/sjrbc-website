@@ -1,8 +1,5 @@
 globalThis.App = {}
 
-function clg(o) {
-  console.log(o);
-}
 
 // featureMinMaxInt('pH') = [7, 9]
 function featureMinMaxInt(prop) {

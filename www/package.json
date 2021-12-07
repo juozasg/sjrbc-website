@@ -1,0 +1,18 @@
+{
+  "name": "sjrbc-website",
+  "description": "Interactive web application to visualize scientific monitoring data for St. Joseph's River",
+  "license": "Apache-2.0",
+  "author": "Juozas Gaigalas",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.1",
+    "parcel": "^2.0.1"
+  },
+  "dependencies": {
+    "d3": "^7.2.0",
+    "esri-leaflet": "^3.0.4",
+    "esri-leaflet-vector": "^3.1.1",
+    "jquery": "^3.6.0",
+    "leaflet": "^1.7.1",
+    "materialize-css": "^1.0.0"
+  }
+}
