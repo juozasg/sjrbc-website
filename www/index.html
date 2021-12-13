@@ -13,35 +13,38 @@
 </head>
 
 <body>
-  <main>
+  <main data-controller="map">
     <div class="card" id="ui" style="display: none;">
-      <div id="filters">
-        <!-- <h5>Data Source</h5> -->
+      <div id="filters" data-controller="layer">
 
-        <button class="btn waves-effect waves-light" id="datainfo">Data Info</button>
+        <button class="btn waves-effect waves-light active" id="datainfo" data-layer-id-param="datainfo" data-action="layer#selected">Data Info</button>
 
+        <a class="btn dropdown-trigger"  data-target="gage">Gage<i class="material-icons right">arrow_drop_down</i></a>
         <ul id="gage" class="dropdown-content">
-          <li><a id="flow" href="#!">Flow (cu ft/s)</a></li>
-          <li><a id="height" href="#!">Height (ft)</a></li>
+          <li><a id="flow" data-action="layer#selected" >Flow (cu ft/s)</a></li>
+          <li><a id="height" data-action="layer#selected" >Height (ft)</a></li>
         </ul>
-        <a class="btn dropdown-trigger" href="#!" data-target="gage">Gage<i class="material-icons right">arrow_drop_down</i></a>
 
+        <a class="btn dropdown-trigger"  data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
         <ul id="env" class="dropdown-content">
-          <li><a href="#!" id="turbidity">Turbidity</a></li>
-          <li><a href="#!" id="temp">Temperature</a></li>
+          <li><a data-action="layer#selected"  id="turbidity">Turbidity</a></li>
+          <li><a data-action="layer#selected" id="temp">Temperature</a></li>
+
           <li class="divider" tabindex="-1"></li>
-          <li><a href="#!" id="ecoli">E. Coli</a></li>
+
+          <li><a id="ecoli" data-action="layer#selected">E. Coli</a></li>
+
           <li class="divider" tabindex="-1"></li>
-          <li><a href="#!" id="nitrate">Nitrate</a></li>
-          <li><a href="#!" id="ph">pH</a></li>
+
+          <li><a id="nitrate" data-action="layer#selected">Nitrate</a></li>
+          <li><a id="ph" data-action="layer#selected">pH</a></li>
         </ul>
-        <a class="btn dropdown-trigger" href="#!" data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
       </div>
 
-      <div id="legendviz" height=200 width=264></div>
+      <div id="legendviz" height=200 width=264 data-controller="legend"></div>
     </div>
 
-  <div id="map"></div>
+  <div id="map" ></div>
 
   <!-- Modal Structure -->
   <div id="modal1" class="modal">
@@ -52,7 +55,7 @@
       </table>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+      <a  class="modal-close waves-effect waves-green btn-flat">Close</a>
     </div>
   </div>
 

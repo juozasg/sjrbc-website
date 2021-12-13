@@ -1,6 +1,3 @@
-globalThis.App = {}
-
-
 // featureMinMaxInt('pH') = [7, 9]
 function featureMinMaxInt(prop) {
   const vals = App.features.map((f) => parseInt(f.properties[prop]));
@@ -72,11 +69,7 @@ function initVars() {
 }
 
 async function initApp() {
-  var elems = document.querySelectorAll('.dropdown-trigger');
-  var instances = M.Dropdown.init(elems, {constrainWidth: false});
 
-  var elems = document.querySelectorAll('.modal');
-  App.modal = M.Modal.init(elems, {})[0];
 
   await loadMapData();
 
