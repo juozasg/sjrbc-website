@@ -4,63 +4,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>St. Joseph River Historic Monitoring Sites</title>
+  <title>St. Joseph River Basin Data Explorer</title>
 
-  <link rel="stylesheet" href="app/main.scss" />
-  <script type="module" src="app/index.js"></script>
+  <link rel="stylesheet" href="style/main.scss" />
+  <script type="module" src="index.js"></script>
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-  <main data-controller="map">
-    <div class="card" id="ui" style="display: none;">
-      <div id="filters" data-controller="layer">
-
-        <button class="btn waves-effect waves-light active" id="datainfo" data-layer-id-param="datainfo" data-action="layer#selected">Data Info</button>
-
-        <a class="btn dropdown-trigger"  data-target="gage">Gage<i class="material-icons right">arrow_drop_down</i></a>
-        <ul id="gage" class="dropdown-content">
-          <li><a id="flow" data-action="layer#selected" >Flow (cu ft/s)</a></li>
-          <li><a id="height" data-action="layer#selected" >Height (ft)</a></li>
-        </ul>
-
-        <a class="btn dropdown-trigger"  data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
-        <ul id="env" class="dropdown-content">
-          <li><a data-action="layer#selected"  id="turbidity">Turbidity</a></li>
-          <li><a data-action="layer#selected" id="temp">Temperature</a></li>
-
-          <li class="divider" tabindex="-1"></li>
-
-          <li><a id="ecoli" data-action="layer#selected">E. Coli</a></li>
-
-          <li class="divider" tabindex="-1"></li>
-
-          <li><a id="nitrate" data-action="layer#selected">Nitrate</a></li>
-          <li><a id="ph" data-action="layer#selected">pH</a></li>
-        </ul>
-      </div>
-
-      <div id="legendviz" height=200 width=264 data-controller="legend"></div>
-    </div>
-
-  <div id="map" ></div>
-
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Point Label</h4>
-      <table class="highlight">
-        <tbody></tbody>
-      </table>
-    </div>
-    <div class="modal-footer">
-      <a  class="modal-close waves-effect waves-green btn-flat">Close</a>
-    </div>
-  </div>
-
-  </main>
-
+  <river-app></river-app>
 </body>
 
 </html>
