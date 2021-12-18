@@ -1,15 +1,14 @@
 import {LitElement, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
-import './river-map.js'
-import './river-data-select.js'
-import './river-table.js'
-import './river-timeseries.js'
+import './map.js'
+import './data-select.js'
+import './table.js'
+import './timeseries.js'
 
 @customElement('river-app')
 class RiverApp extends LitElement {
-
-  // no Shadow DOM for Materialize CSS Modal
+  // no Shadow DOM for Materialize CSS
   createRenderRoot() {
     return this;
   }

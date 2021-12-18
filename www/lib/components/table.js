@@ -6,7 +6,6 @@ class RiverTable extends LitElement {
   @property({attribute: false}) modal; 
   @queryAll('#modal') _modalNodeList;
   
-  // no Shadow DOM
   createRenderRoot() {
     return this;
   }
