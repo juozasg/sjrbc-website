@@ -22,18 +22,19 @@ class RiverDataSelect extends LitElement {
 
   render() {
     return html`
-      <div class="card data-select">
+
+    <div class="card data-select">
         <div id="filters">
 
-          <button class="btn waves-effect waves-light active" id="datainfo">Data Info</button>
+          <button class="btn waves-effect waves-light active"  id="datainfo">Data Info</button>
 
-          <a class="btn dropdown-trigger">Gage<i class="material-icons right">arrow_drop_down</i></a>
+          <a class="btn dropdown-trigger" data-target="gage">Gage<i class="material-icons right">arrow_drop_down</i></a>
           <ul id="gage" class="dropdown-content">
             <li><a id="flow">Flow (cu ft/s)</a></li>
             <li><a id="height">Height (ft)</a></li>
           </ul>
 
-          <a class="btn dropdown-trigger">Environmental<i class="material-icons right">arrow_drop_down</i></a>
+          <a class="btn dropdown-trigger" data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
           <ul id="env" class="dropdown-content">
             <li><a id="turbidity">Turbidity</a></li>
             <li><a id="temp">Temperature</a></li>
@@ -54,5 +55,4 @@ class RiverDataSelect extends LitElement {
     `;
   }
 }
-// customElements.define('river-data-select', RiverDataSelect);
 
