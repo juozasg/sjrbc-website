@@ -95,22 +95,29 @@ body { margin:0; padding:0; }
 }
 
 .datepicker {
-  width: 160px !important;
+  width: 130px !important;
   margin-left: 0rem !important;
-  margin-right: 2rem !important;
-  padding-left: 8px !important;
+  margin-right: 1rem !important;
+  padding-left: 4px !important;
+
+  height: 2rem !important;
 
   &:focus {
     border-bottom: 1px solid #0d47a1 !important;
     box-shadow: 0 1px 0 0 #0d47a1 !important;
   }
+}
 
+.hint {
+  @extend .grey-text,.darken-3;
 }
 
 .datepicker-icon {
+  display: none;
   position: relative;
+  opacity: 0.6;
   width: 0;
-  left: -62px;
+  left: -28px;
   top: 6px;
 }
 

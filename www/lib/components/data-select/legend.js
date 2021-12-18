@@ -12,6 +12,11 @@ class RiverDataSelectLegend extends LitElement {
 
   sourceChanged(sourceId) {
     this.sourceId = sourceId;
+
+    //TODO: 
+    // lookup min/max values from real data (with time range? - fake it for now )
+    // create scales and render them
+    // architect the whole legend thing to be good and work with data
   }
 
   render() {

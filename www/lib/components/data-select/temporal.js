@@ -82,13 +82,13 @@ class RiverDataSelectTemporal extends LitElement {
       <!-- <input type="text" class="datepicker" value="1999-12-30" id="fromdate">
       <input type="text" class="datepicker" value="10000-12-30" id="todate"> -->
 
-      From 
+      <span class="hint">From</span> 
       <div class="input-field inline">
         <input class="datepicker" id="fromdate" @change=${this.fromDateChange}>
         <i class="material-icons datepicker-icon">date_range</i>
       </div>
 
-      To
+      <span class="hint">To</span> 
       <div class="input-field inline">
         <input class="datepicker" id="todate" @change=${this.toDateChange}>
         <i class="material-icons datepicker-icon">date_range</i>
