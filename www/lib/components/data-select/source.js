@@ -47,9 +47,8 @@ class RiverDataSelectSource extends LitElement {
   }
 
   render() {
-    console.log("render select-source");
     return html`
-      <button class="btn waves-effect waves-light ${this.classActive('datainfo')}" class="active" @click="${this.sourceSelect}" id="datainfo">Data Density</button>
+      <button class="btn waves-effect waves-light ${this.classActive('datainfo')}" class="active" @click="${this.sourceSelect}" id="datainfo">Data Info</button>
 
       <a class="btn dropdown-trigger ${this.classActive('gage')}" data-target="gage">Gage<i class="material-icons right">arrow_drop_down</i></a>
       <ul id="gage" class="dropdown-content">

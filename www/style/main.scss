@@ -57,12 +57,13 @@ body { margin:0; padding:0; }
   .btn {
     margin: 0 2px;
   }
+
 }
 
 #dataview {
-  display: none;
+  // display: none;
 
-  background-color: aquamarine;
+  // background-color: aquamarine;
 }
 
 #legendviz {
@@ -91,6 +92,50 @@ body { margin:0; padding:0; }
 
 #physical-selector {
   display: flex;
+}
+
+.datepicker {
+  width: 160px !important;
+  margin-left: 0rem !important;
+  margin-right: 2rem !important;
+  padding-left: 8px !important;
+
+  &:focus {
+    border-bottom: 1px solid #0d47a1 !important;
+    box-shadow: 0 1px 0 0 #0d47a1 !important;
+  }
+
+}
+
+.datepicker-icon {
+  position: relative;
+  width: 0;
+  left: -62px;
+  top: 6px;
+}
+
+.air-datepicker-global-container {
+  z-index:10001;
+
+  nav {
+    @extend .blue, .darken-4;
+    
+    i {
+      color: white;
+    }
+
+    path {
+      stroke: white;
+    }
+
+    .air-datepicker-nav--action, .air-datepicker-nav--title {
+      &:hover {
+        @extend .indigo, .lighten-1;
+      }
+    }
+
+    width: 239px;
+  }
 }
 
 #ree {background-color: red;}
