@@ -7,14 +7,13 @@ window.d3 = d3;
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 
-
-import {measurementRadiusLegend, dataDensityRadiusLegend} from  '../../legend/radius.js';
+import {measurementScaleLegend} from  '../../legend/scale.js';
+import {measurementRadiusLegend, samplingFrequencyRadiusLegend} from  '../../legend/radius.js';
 
 @customElement('river-data-select-legend')
 class RiverDataSelectLegend extends LitElement {
   @property() sourceId;
   @query('#legend') legendContainer;
-
 
   // [min, max] pixels
   radiusRange = [5, 20];
@@ -25,40 +24,47 @@ class RiverDataSelectLegend extends LitElement {
   }
 
 
-  // replaceLegend(variable) {
-  //   $('svg.legend').remove();
-
-  //   const label = this.sourceId;
-  //   const legendSvg = Legend(App.vars[variable].scale, {
-  //     title: label,
-  //     width: 264,
-  //     marginLeft: 18,
-  //     marginRight: 18,
-  //     ticks: 7
-  //   });
-
-  //   legendSvg.setAttribute('class', 'legend');
-  //   $('#legendviz').append(legendSvg);
-
-  //   // radius legend
-  //   const rLegendSvg = buildRadiusLegend(variable);
-  //   rLegendSvg.setAttribute('class', 'legend');
-  //   $('#legendviz').append(rLegendSvg);
-  // }
-
   renderLegend() {
     this.legendContainer.replaceChildren();
 
     // 90 to 0 days last measurement currency
-    let colorScale = d3.scaleSequential([90, 0], d3.interpolateCividis);
+    let colorScale;
+    if(this.sourceId == 'datainfo') {
+      colorScale = d3.scaleSequential([90, 0], d3.interpolateMagma);
+    } else {
+      colorScale = d3.scaleSequential([0, 5000], d3.interpolateBuPu);
+    }
+
     const averageColor = colorScale.copy().domain([0, 1])(0.5);
 
-    // 1 montly reading to 2976 readings (15 mins for 31 days)
-    let radiusLegend = dataDensityRadiusLegend(averageColor, d3.scaleLinear().range([5, 20]));
-    this.legendContainer.appendChild(radiusLegend);
+    // COLOR SCALE
+    let scaleLegend = measurementScaleLegend(colorScale)
+    this.legendContainer.appendChild(scaleLegend);
 
-    let label = document.createElement('h6');
-    label.innerText = 'Site sampling frequency';
+    // let label;
+    if(this.sourceId == 'datainfo') {
+      let label = document.createElement('h6');
+      label.innerText = 'Days since last observation';
+      label.setAttribute('class', 'datainfo-color-label');
+      this.legendContainer.appendChild(label);
+    }
+
+    
+
+    // RADIUS SCALE
+    let radiusLegend;
+    label = document.createElement('h6');
+
+    if(this.sourceId == 'datainfo') {
+      // data density is ordinal data [Y,M,...,RT] or [0,1,...,4]
+      radiusLegend = samplingFrequencyRadiusLegend(colorScale);      
+      label.innerText = 'Site sampling frequency';
+    } else {
+      radiusLegend = measurementRadiusLegend(colorScale);
+      label.innerText = this.sourceId;
+    }
+
+    this.legendContainer.appendChild(radiusLegend);
     this.legendContainer.appendChild(label);
   }
 
@@ -82,8 +88,7 @@ class RiverDataSelectLegend extends LitElement {
     tippy('.tippy', {
       zIndex: 10001
     });
-    // var elems = this.querySelectorAll('.tooltipped');
-    // var instances = M.Tooltip.init(elems, {position: 'top'});
+
   }
 }
 

@@ -73,6 +73,8 @@ input, text, .numeric {
 }
 
 #legend {
+  width: 300px;
+
   g {
     pointer-events: bounding-box;
   }
@@ -85,6 +87,10 @@ input, text, .numeric {
     margin: 0;
     text-align: center;
     font-weight: 600;
+  }
+
+  h6.datainfo-color-label {
+    margin-bottom: 8px;
   }
 }
 
