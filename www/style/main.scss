@@ -3,6 +3,12 @@
 
 
 body { margin:0; padding:0; }
+
+input, text, .numeric {
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+
 #map {
   position: absolute;
   top:0;
@@ -66,9 +72,20 @@ body { margin:0; padding:0; }
   // background-color: aquamarine;
 }
 
-#legendviz {
-  margin-top: 32px;
-  margin-bottom: 8px;
+#legend {
+  g {
+    pointer-events: bounding-box;
+  }
+
+  g:focus {
+    outline: none;
+  }
+
+  h6 {
+    margin: 0;
+    text-align: center;
+    font-weight: 600;
+  }
 }
 
 
@@ -144,5 +161,7 @@ body { margin:0; padding:0; }
     width: 239px;
   }
 }
+
+
 
 #ree {background-color: red;}

@@ -1,6 +1,9 @@
 // Copyright 2021, Observable Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/color-legend
+
+import * as d3 from "d3";
+
 function Legend(color, {
   title,
   tickSize = 6,
