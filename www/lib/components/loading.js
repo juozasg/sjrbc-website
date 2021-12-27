@@ -4,9 +4,9 @@ import {customElement, queryAll, property} from 'lit/decorators.js';
 @customElement('river-loading')
 class RiverLoading extends LitElement {
   @property({attribute: false}) modal; 
-  @property() loadedUSGS = false;
-  @property() loadedHistoric = false;
-  @property() failures = "";
+  @property() loadedUSGS;
+  @property() loadedHistoric;
+  @property() failures;
 
   @queryAll('.modal') modalEls;
 
@@ -20,8 +20,16 @@ class RiverLoading extends LitElement {
     this.modal.open();
   }
 
-  failure(text) {
-    this.failures += (text + " ");
+  failure(e) {
+    this.failures += (e.message + "\n");
+  }
+
+  constructor() {
+    super();
+    this.failures = '';
+    this.loadedUSGS = false;
+    this.loadedHistoric = false;
+    window.ld = this;
   }
 
   render() {
@@ -69,7 +77,7 @@ class RiverLoading extends LitElement {
           <div id="datalist">
             ${usgs}
             ${historic}
-            <span style="overflow: auto" class="pink-text text-darken-2">${this.failures}</span>
+            <pre style="overflow: auto" class="pink-text text-darken-2">${this.failures}</pre>
           </div>
         </div>
         <div class="modal-footer">

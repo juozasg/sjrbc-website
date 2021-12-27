@@ -24,8 +24,9 @@ class RiverMap extends LitElement {
 
   render() {
     return html`
-    <div id="map"></div>
     <river-loading></river-loading>
+
+    <div id="map"></div>
     `;
   }
 
@@ -58,5 +59,11 @@ class RiverMap extends LitElement {
       apiKey: this.apiKey
     });
 
+  }
+
+  modelToLayers(model) {
+    this.model = model;
+    console.log("mapping model:");
+    console.log(model);
   }
 }

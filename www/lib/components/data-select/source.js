@@ -4,11 +4,17 @@ import {customElement, property, state} from 'lit/decorators.js';
 
 @customElement('river-data-select-source')
 class RiverDataSelectSource extends LitElement {
-  @property() sourceId = "datainfo";
-  @state() category = "datainfo";
+  @property() sourceId;
+  @state() category;
 
   createRenderRoot() {
     return this;
+  }
+
+  constructor() {
+    super();
+    this.sourceId = "datainfo";
+    this.category = "datainfo";
   }
 
   firstUpdated() {
