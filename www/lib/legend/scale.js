@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 
 export function measurementScaleLegend(colorScale) {
-    
   const svg = d3.create("svg")
     .attr("height", 50)
     // .attr("style", "border: 1px solid green;")
@@ -9,23 +8,37 @@ export function measurementScaleLegend(colorScale) {
     .style("display", "block");
 
 
-    const dataUrl = colorGradientDataUrl(colorScale)
+    const dataUrl = colorGradientDataUrl(colorScale);
 
     let x0 = 10;
+    let w = 280;
     svg.append("image")
       .attr("x", x0)
       .attr("y", 0)
-      .attr("width", 280)
+      .attr("width", w)
       .attr("height", 20)
       .attr("preserveAspectRatio", "none")
       .attr("href", dataUrl);
 
 
-    svg.append("text")
-      .attr("x", x0)
+    // safer manually defined ticks
+    const ticks = [0, 0.25, 0.5, 0.75, 1];
+    const nTicks = ticks.length;
+    const textLabelScale = d3.scaleLinear().range(colorScale.domain())
+
+    // https://observablehq.com/@d3/scale-ticks#format
+    const tickFormat = colorScale.tickFormat(nTicks);
+
+    console.log(nTicks);
+    console.log(ticks);
+
+    svg.selectAll('text').data(ticks)
+      .enter()
+      .append("text")
+      .attr("x", (d,i) => x0 + (w * i/(nTicks - 1)))
       .attr("y", 40)
       .attr("text-anchor", "middle")
-      .text("90");
+      .text((d) => tickFormat(textLabelScale(d)));
 
     return svg.node();
 }

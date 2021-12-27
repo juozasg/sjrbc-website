@@ -23,13 +23,15 @@ class RiverDataSelectLegend extends LitElement {
     return this;
   }
 
-
   renderLegend() {
     this.legendContainer.replaceChildren();
+    if(this.sourceId == undefined) {
+      return;
+    }
 
-    // 90 to 0 days last measurement currency
     let colorScale;
     if(this.sourceId == 'datainfo') {
+      // 90 to 0 days last measurement currency
       colorScale = d3.scaleSequential([90, 0], d3.interpolateMagma);
     } else {
       colorScale = d3.scaleSequential([0, 5000], d3.interpolateBuPu);
@@ -50,7 +52,6 @@ class RiverDataSelectLegend extends LitElement {
     }
 
     
-
     // RADIUS SCALE
     let radiusLegend;
     label = document.createElement('h6');
@@ -88,7 +89,6 @@ class RiverDataSelectLegend extends LitElement {
     tippy('.tippy', {
       zIndex: 10001
     });
-
   }
 }
 
