@@ -74,7 +74,7 @@ class RiverDataSelectLegend extends LitElement {
 
 
   render() {
-    console.log('legend render');
+    console.log(' render');
     return html`
       <div id="legend"></div>
     `;

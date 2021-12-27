@@ -29,9 +29,6 @@ export function measurementScaleLegend(colorScale) {
     // https://observablehq.com/@d3/scale-ticks#format
     const tickFormat = colorScale.tickFormat(nTicks);
 
-    console.log(nTicks);
-    console.log(ticks);
-
     svg.selectAll('text').data(ticks)
       .enter()
       .append("text")
