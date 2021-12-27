@@ -5,7 +5,8 @@ import {customElement, queryAll, property} from 'lit/decorators.js';
 class RiverLoading extends LitElement {
   @property({attribute: false}) modal; 
   @property() loadedUSGS = false;
-  @property() loadedHistoric = true;
+  @property() loadedHistoric = false;
+  @property() failures = "";
 
   @queryAll('.modal') modalEls;
 
@@ -17,6 +18,10 @@ class RiverLoading extends LitElement {
   firstUpdated() {
     this.modal = M.Modal.init(this.modalEls, {})[0];
     this.modal.open();
+  }
+
+  failure(text) {
+    this.failures += (text + " ");
   }
 
   render() {
@@ -64,6 +69,7 @@ class RiverLoading extends LitElement {
           <div id="datalist">
             ${usgs}
             ${historic}
+            <span style="overflow: auto" class="pink-text text-darken-2">${this.failures}</span>
           </div>
         </div>
         <div class="modal-footer">
@@ -74,7 +80,7 @@ class RiverLoading extends LitElement {
   }
 
   updated() {
-    if(this.loadedHistoric == this.loadedUSGS == true) {
+    if(this.loadedHistoric == true && this.loadedUSGS == true) {
       this.modal.close();
     }
   }

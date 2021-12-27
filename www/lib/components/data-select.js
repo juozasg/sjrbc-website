@@ -42,7 +42,6 @@ class RiverDataSelect extends LitElement {
   }
 
   render() {
-    console.log("render data-select");
     return html`
 
     <div class="card data-select">

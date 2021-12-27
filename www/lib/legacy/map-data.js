@@ -1,7 +1,6 @@
 // initialize remote app data: map, layer and features list
 // returns a promise
 async function loadMapData() {
-  const featureService = "https://services1.arcgis.com/fe2kKd3pQJKqve16/arcgis/rest/services/HistoricMonitoringSites/FeatureServer/0";
   const apiKey = "AAPK3dfaa40a13c0404983142c26b566596ammsJLVROPRkVaZnrwj6bYIrYdi4FEikx7NZpYg7f5M9XlV2RFL6PgxMA_56IceHv";
   const basemapEnum = "ArcGIS:Topographic";
 
