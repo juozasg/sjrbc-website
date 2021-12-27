@@ -4,20 +4,19 @@ import {customElement, queryAll, property} from 'lit/decorators.js';
 @customElement('river-table')
 class RiverTable extends LitElement {
   @property({attribute: false}) modal; 
-  @queryAll('#modal') _modalNodeList;
+  @queryAll('.modal') modalEls;
   
   createRenderRoot() {
     return this;
   }
 
   firstUpdated() {
-    this.modal = M.Modal.init(this._modalNodeList, {})[0];
-    // this.modal.open();
+    this.modal = M.Modal.init(this.modalEls, {})[0];
   }
 
   render() {
     return html`
-      <div id="modal" class="modal">
+      <div id="modal-table" class="modal">
         <div class="modal-content">
           <h4>Modal</h4>
           <table class="highlight">

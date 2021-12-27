@@ -1,5 +1,5 @@
 import {LitElement, html} from 'lit'; 
-import {customElement} from 'lit/decorators.js';
+import {customElement, query} from 'lit/decorators.js';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -7,9 +7,13 @@ import { Map as LeafletMap, Icon, Marker, Control } from "leaflet";
 import { FeatureLayer } from "esri-leaflet";
 import { vectorBasemapLayer } from "esri-leaflet-vector";
 
+import './loading.js'
+
 @customElement('river-map')
 class RiverMap extends LitElement {
   apiKey = "AAPK3dfaa40a13c0404983142c26b566596ammsJLVROPRkVaZnrwj6bYIrYdi4FEikx7NZpYg7f5M9XlV2RFL6PgxMA_56IceHv";
+
+  @query('river-loading') loading;
 
   createRenderRoot() {
     return this;
@@ -18,6 +22,7 @@ class RiverMap extends LitElement {
   render() {
     return html`
     <div id="map"></div>
+    <river-loading></river-loading>
     `;
   }
 
