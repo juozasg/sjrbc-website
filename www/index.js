@@ -1,4 +1,4 @@
-import "./lib/jquery-global.js"
+import "./lib/util/jquery-global.js"
 import "materialize-css";
 
 import "./lib/components/river-app.js"
@@ -16,12 +16,5 @@ import "./lib/components/river-app.js"
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log("dom ready");
-  // $('#ui').css('display', 'flex');
-
-
-  // var elems = document.querySelectorAll('.dropdown-trigger');
-  // var instances = M.Dropdown.init(elems, {constrainWidth: false});
-
-  // var elems = document.querySelectorAll('.modal');
-  // var modal = M.Modal.init(elems, {})[0];
 });
+

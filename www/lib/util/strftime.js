@@ -6,7 +6,6 @@
  * Week number (%V) code based on Taco van den Broek's prototype:
  * http://techblog.procurios.nl/k/news/view/33796/14863/calculate-iso-8601-week-and-year-in-javascript.html
  */
-console.log("hola");
 export default function strftime(sFormat, date) {
   if (!(date instanceof Date)) date = new Date();
   var nDay = date.getDay(),

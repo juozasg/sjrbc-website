@@ -64,6 +64,10 @@ input, text, .numeric {
     margin: 0 2px;
   }
 
+  .input-field.inline {
+    // margin-top: 6px;
+    margin-bottom: 6px;
+  }
 }
 
 #dataview {
@@ -90,7 +94,7 @@ input, text, .numeric {
   }
 
   h6.datainfo-color-label {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 }
 

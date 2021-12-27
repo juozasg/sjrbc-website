@@ -85,4 +85,3 @@ export function samplingFrequencyRadiusLegend(colorScale) {
 
   return svg.node();
 }
-

@@ -5,15 +5,8 @@ import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
 import 'air-datepicker/air-datepicker.css';
 
-import strftime from '../../util/strftime.js';
-
-
-
 @customElement('river-data-select-temporal')
 class RiverDataSelectTemporal extends LitElement {
-
-  // dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[1-9]|2[1-9])$/
-
   @property({type: Object}) fromDate; // Date object
   @property({type: Object}) toDate;
 
@@ -97,4 +90,3 @@ class RiverDataSelectTemporal extends LitElement {
     `;
   }
 }
-

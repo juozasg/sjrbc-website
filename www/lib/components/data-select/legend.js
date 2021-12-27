@@ -15,9 +15,6 @@ class RiverDataSelectLegend extends LitElement {
   @property() sourceId;
   @query('#legend') legendContainer;
 
-  // [min, max] pixels
-  radiusRange = [5, 20];
-
   // no Shadow DOM
   createRenderRoot() {
     return this;
@@ -86,7 +83,7 @@ class RiverDataSelectLegend extends LitElement {
   updated() {
     this.renderLegend();
 
-    tippy('.tippy', {
+    tippy('#legend .tippy', {
       zIndex: 10001
     });
   }
