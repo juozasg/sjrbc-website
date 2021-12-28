@@ -20,11 +20,11 @@ export class DataController {
         .then(() => this.host.loading.loadedUSGS = true)
         .catch(e => this.host.loading.failure(e)));
 
-      loaders.push(
-        this.loadHistoric()
-        .then(d => this.model.processHistoric(d))
-        .then(() => this.host.loading.loadedHistoric = true)
-        .catch(e => this.host.loading.failure(e)));
+    loaders.push(
+      this.loadHistoric()
+      .then(d => this.model.processHistoric(d))
+      .then(() => this.host.loading.loadedHistoric = true)
+      .catch(e => this.host.loading.failure(e)));
 
     Promise.all(loaders).then(() => this.host.modelToLayers(this.model));
   }

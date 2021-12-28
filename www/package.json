@@ -3,7 +3,6 @@
   "description": "Interactive web application to visualize scientific monitoring data for St. Joseph's River",
   "license": "Apache-2.0",
   "author": "Juozas Gaigalas",
-  "browserslist": "> 0.5%, last 2 versions, not dead",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.16.5",
     "@babel/plugin-proposal-decorators": "^7.16.5",
@@ -16,12 +15,15 @@
     "air-datepicker": "^3.1.0",
     "babel-plugin-disable-parcel-hmr": "file:./vendor/babel-plugin-disable-parcel-hmr",
     "d3": "^7.2.0",
+    "data-forge": "^1.9.2",
     "esri-leaflet": "^3.0.4",
     "esri-leaflet-vector": "^3.1.1",
     "jquery": "^3.6.0",
     "leaflet": "^1.7.1",
     "lit": "^2.0.2",
     "materialize-css": "^1.0.0",
+    "plotly": "^1.0.6",
+    "seedrandom": "~2.4.3",
     "tippy.js": "^6.3.7"
   }
 }
