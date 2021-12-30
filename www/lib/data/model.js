@@ -9,6 +9,9 @@ import * as df from 'data-forge';
 import tzAbbr from 'timezone-abbr-offsets';
 
 import {safeID} from '../util/data-helpers.js'
+import {timer} from '../util/debug.js'
+
+import Papa from 'papaparse';
 
 window.tzAbbr = tzAbbr;
 
@@ -21,55 +24,93 @@ export class Model {
     this.sites = {}
   }
 
-
-  /* ['SiteName', 'SiteID', 'Lat', 'Lon', 'Feature', 'Height_ft, 'Flow_cfs'] */
-  async processUSGS(data) {
-    console.log('process usgs');
-    console.log(data);
-
-    let dframe = new df.DataFrame({});
+  async processUSGSSites(data) {
+    console.log('process usgs sites');
 
     data.value.timeSeries.forEach(ts => {
       let columns = {}
 
       const siteCode = ts.sourceInfo.siteCode[0].value;
-      columns.SiteID = `usgs-${siteCode}`;
+      let siteID = `usgs-${siteCode}`;
+      if(!this.sites[siteID]) {
+        const feature = {};
+        feature.id = siteID;
 
-      const feature = {};
-      const loc = ts.sourceInfo.geoLocation.geogLocation;
-      feature.type = 'Feature';
-      feature.id = columns.SiteID;
-      feature.geometry = {
-        type: "Point",
-        coordinates: [
-            loc.longitude,
-            loc.latitude
-        ]
-      };
-      columns.Feature = feature;
+        const loc = ts.sourceInfo.geoLocation.geogLocation;
+        feature.type = 'Feature';
+        feature.id = columns.SiteID;
+        feature.geometry = {
+          type: "Point",
+          coordinates: [
+              loc.longitude,
+              loc.latitude
+          ]
+        };
 
-      columns.Lat = loc.latitude;
-      columns.Lon = loc.longitude;
-  
-
-      columns.SiteName = ts.sourceInfo.siteName;
-      // TODO: TimeSeries
-      // stations[siteCode]['properties']['LastMeasurement'] = 0;
-
-      if(ts.variable.variableCode[0].value == '00060') {
-        // Streamflow cft/s
-        columns.Flow_cfs = ts.values[0].value[0].value;
-      } else if (ts.variable.variableCode[0].value == '00065') {
-        // Gage height, ft
-        columns.Height_ft = ts.values[0].value[0].value;
+        this.sites[siteID] = {
+          siteID: siteID,
+          siteName: ts.sourceInfo.siteName,
+          lat: feature.geometry.coordinates[1],
+          lon: feature.geometry.coordinates[0],
+          feature: feature,
+          df: new df.DataFrame({})
+        };
       }
-
-      dframe = dframe.merge();
     });
 
-    // console.log(dframe.toString());
-    this.data = this.data.merge(dframe);
+    console.log(this.sites);
+
   }
+
+  async processUSGSSiteData(data) {
+    let t1 = timer('USGS Papa parse')
+
+    let rows = Papa.parse(data, {
+      delimiter: "\t",
+      comments: "#"
+    }).data;
+
+    t1.stop();
+
+
+    // may not work with all sites
+    // each TS_ID section in the RDB data should be parsed separately
+    // and columns calculated from the headers
+    const agencyCol = 0;
+    const siteCol = 1;
+    const dateCol = 2;
+    const tzCol = 3;
+    const flowCol = 4; // "TS_ID_00060"
+    const heightCol = 6; // "TS_ID_00065"
+
+    let t2 = timer('USGS build df');
+    rows.forEach(row => {
+      // some rows have headers
+      if(row[agencyCol] != 'USGS') {
+        return;
+      }
+
+      let siteID = 'usgs-' + row[siteCol];
+      if(this.sites[siteID]) {
+        let tzOffset = tzAbbr[row[tzCol]];
+        let dateStr = row[dateCol] + tzOffset;
+
+
+        let columns = {
+          date: new Date(Date.parse(dateStr)),
+          flow: parseFloat(row[flowCol]),
+          height: parseFloat(row[heightCol])
+        };
+
+        let dframe = new df.DataFrame([columns]).setIndex('date')
+        // TODO: optimize as needed
+        this.sites[siteID].df = this.sites[siteID].df.concat(dframe);
+      }
+    });
+
+    t2.stop();
+  }
+
 
   async processElkhart(data) {
     const columns = {
@@ -129,7 +170,7 @@ export class Model {
       this.sites[siteID].df = this.sites[siteID].df.merge(dframe);
     });
 
-    this.printStatistics();
+    // this.printStatistics();
   }
 
   printStatistics() {
@@ -149,7 +190,7 @@ export class Model {
     }
     console.log(allSeries);
     for (const [name, series] of Object.entries(allSeries)) {
-      console.log(`${name} [${series.min()}, ${series.max()}]   AVG: ${series.median()} MEDIAN: ${series.median()}`);
+      console.log(`${name} [${series.min()}, ${series.max()}]  AVG:${series.median()} MEDIAN:${series.median()}`);
     }
 
     // window.allSeries = allSeries;
