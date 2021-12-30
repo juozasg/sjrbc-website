@@ -64,8 +64,12 @@ class RiverDataSelectSource extends LitElement {
 
       <a class="btn dropdown-trigger ${this.classActive('env')} " data-target="env">Environmental<i class="material-icons right">arrow_drop_down</i></a>
       <ul id="env" class="dropdown-content">
-        <li><a @click="${this.sourceSelect}" id="turbidity">Turbidity</a></li>
+        <!-- <li><a @click="${this.sourceSelect}" id="turbidity">Turbidity</a></li> -->
         <li><a @click="${this.sourceSelect}" id="temp">Temperature</a></li>
+        <li><a @click="${this.sourceSelect}" id="spc">Specific Conductance</a></li>
+        <li><a @click="${this.sourceSelect}" id="do">Disolved Oxygen</a></li>
+        <li><a @click="${this.sourceSelect}" id="tds">Total Dissolved Solids (mg/L)</a></li>
+        <li><a @click="${this.sourceSelect}" id="tss">Total Suspended Solids (mg/L)</a></li>
 
         <li class="divider" tabindex="-1"></li>
 
@@ -73,7 +77,9 @@ class RiverDataSelectSource extends LitElement {
 
         <li class="divider" tabindex="-1"></li>
 
-        <li><a @click="${this.sourceSelect}" id="nitrate">Nitrate</a></li>
+        <li><a @click="${this.sourceSelect}" id="nitrates">Nitrate</a></li>
+        <li><a @click="${this.sourceSelect}" id="phosphorus">Phosphorus</a></li>
+        <li><a @click="${this.sourceSelect}" id="chlorides">Chlorides</a></li>
         <li><a @click="${this.sourceSelect}" id="ph">pH</a></li>
       </ul>
     `;

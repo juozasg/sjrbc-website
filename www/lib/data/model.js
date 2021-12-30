@@ -2,17 +2,25 @@
 import * as df from 'data-forge';
 //import { readFile, Series, DataFrame } from 'data-forge';
 
+// date parsing
+// EST: new Date(Date.parse('2007-11-11 12:00-05:00'))
+// EDT: new Date(Date.parse('2007-11-11 12:00-04:00'))
+
+import tzAbbr from 'timezone-abbr-offsets';
+
+import {safeID} from '../util/data-helpers.js'
+
+window.tzAbbr = tzAbbr;
+
 window.df = df;
 
 export class Model {
   constructor() {
-    this.data = new df.DataFrame({
-      columnNames: ["SiteName", "SiteID", "Lat", "Lon", 'Feature'],
-      rows: []
-    }).setIndex('SiteID');;
-
     window.model = this;
+    // { siteID => {name,lat,lon,feature,df}}
+    this.sites = {}
   }
+
 
   /* ['SiteName', 'SiteID', 'Lat', 'Lon', 'Feature', 'Height_ft, 'Flow_cfs'] */
   async processUSGS(data) {
@@ -56,46 +64,94 @@ export class Model {
         columns.Height_ft = ts.values[0].value[0].value;
       }
 
-      dframe = dframe.merge(new df.DataFrame([columns]).setIndex('SiteID'));
+      dframe = dframe.merge();
     });
 
     // console.log(dframe.toString());
     this.data = this.data.merge(dframe);
   }
 
-  /*
-  * ['SiteName', 'SiteID', 'Lat', 'Lon', 'Feature', 'Water_Body', 'Sampling_P', 'pH', 'Temp',
-  * 'Dissolved', 'BOD__mg_l', 'BOD', 'Chlorides', 'Conductivi', 'Total_Diss', 'Escherichi', 'Nitrate_Ni',
-  * 'Total_Phos', 'Turbidity', 'Total_Susp', 'Flow_cfs']
-  */
-  async processHistoric(data) {
-    const rows = [];
+  async processElkhart(data) {
+    const columns = {
+      raining: "RAINING",// : "NA",
+      wet: "WET",//: "1",
+      temp: "TEMP",//: 13.6,
+      do: "DO",//: 10.1,
+      spc: "SPC",//: 346.2,
+      ph: "PH",//: 8.33,
+      nitrates: "NITRATES",//: 1.19,
+      phosphorus: "PHOSPHORUS",//: 0.008,
+      chlorides: "CHLORIDES",//: 33.42,
+      tds: "TDS",//: 380,
+      tss: "TSS",//: 2.14,
+      ecoli: "E__COLI",//: 83,
+      date: "DATE",//: 1462838400000,
+      current: "Current_"//: "Yes"
+    }
 
     data.features.forEach(feature => {
-      // TODO: TimeSeries
-      let columns = feature.properties;
+      let props = feature.properties;
       delete feature.properties;
 
-      columns.SiteName = columns.Location;
-      delete columns.Location;
+      // "Christiana Creek - CR 4" -> "elkhart-Christiana-Creek-CR-4"
+      const siteID = 'elkhart-' + safeID(props.Site_Location_Name);
+      if(!this.sites[siteID]) {
+        feature.id = siteID;
+        let dframe = new df.DataFrame({columnNames: ['date'], rows: []}).setIndex('date');
+        this.sites[siteID] = {
+          siteID: siteID,
+          siteName: props.Site_Location_Name,
+          lat: feature.geometry.coordinates[1],
+          lon: feature.geometry.coordinates[0],
+          feature: feature,
+          df: dframe
+        };
+      }    
 
-      columns.Lon = columns.Long;
-      delete columns.Long;
+      let columns = {
+        raining: props["RAINING"],
+        wet: props["WET"] == "1",
+        temp: props["TEMP"],
+        do: props["DO"],
+        spc: props["SPC"],
+        ph: props["PH"],
+        nitrates: props["NITRATES"],
+        phosphorus: props["PHOSPHORUS"],
+        chlorides: props["CHLORIDES"],
+        tds: props["TDS"],
+        tss: props["TSS"],
+        ecoli: props["E__COLI"],
+        date: new Date(props["DATE"]),
+        current: props["Current_"]
+      }
 
-      columns.SiteID = `historic-${columns.Object_ID}`;
-      delete columns.Object_ID;
-      delete columns.OBJECTID;
-      delete columns.SymbolID;
-
-      columns.Feature = feature;
-      columns.Feature.id = columns.SiteID;
-
-      rows.push(columns);
+      let dframe = new df.DataFrame([columns]).setIndex('date')
+      this.sites[siteID].df = this.sites[siteID].df.merge(dframe);
     });
 
-    this.data = this.data.merge(new df.DataFrame({values: rows}).setIndex('SiteID'));
-
-    // console.log(this.data.toString());
+    this.printStatistics();
   }
 
+  printStatistics() {
+    // get ranges
+    let allSeries = {}
+    for (const [id, site] of Object.entries(this.sites)) {
+      for (const column of site.df.getColumns()) {
+        const name = column.name;
+        const series = column.series;
+        console.log(name);
+        if(!allSeries[name]) {
+          allSeries[name] = new df.Series();
+        }
+
+        allSeries[name] = allSeries[name].concat(series)
+      }
+    }
+    console.log(allSeries);
+    for (const [name, series] of Object.entries(allSeries)) {
+      console.log(`${name} [${series.min()}, ${series.max()}]   AVG: ${series.median()} MEDIAN: ${series.median()}`);
+    }
+
+    // window.allSeries = allSeries;
+  }
 }

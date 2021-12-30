@@ -5,7 +5,7 @@ import {customElement, queryAll, property} from 'lit/decorators.js';
 class RiverLoading extends LitElement {
   @property({attribute: false}) modal; 
   @property() loadedUSGS;
-  @property() loadedHistoric;
+  @property() loadedElkhart;
   @property() failures;
 
   @queryAll('.modal') modalEls;
@@ -22,19 +22,20 @@ class RiverLoading extends LitElement {
 
   failure(e) {
     this.failures += (e.message + "\n");
+    console.error(e);
   }
 
   constructor() {
     super();
     this.failures = '';
     this.loadedUSGS = false;
-    this.loadedHistoric = false;
+    this.loadedElkhart = false;
     window.ld = this;
   }
 
   render() {
     let usgs;
-    let historic;
+    let elkhart;
 
     if (this.loadedUSGS) {
       usgs = html`
@@ -53,16 +54,16 @@ class RiverLoading extends LitElement {
     }
 
 
-    if (this.loadedHistoric) {
-      historic = html`
-        <h5>Historic Monitoring Data Loaded</h5>
+    if (this.loadedElkhart) {
+      elkhart = html`
+        <h5>Elkhart Monitoring Data Loaded</h5>
         <div class="progress">
           <div style="width: 100%" class="determinate"></div>
         </div>
       `;
     } else {
-      historic = html`
-      <h5>Historic Monitoring Data</h5>
+      elkhart = html`
+      <h5>Elkhart Monitoring Data</h5>
       <div class="progress">
         <div class="indeterminate"></div>
       </div>
@@ -76,7 +77,7 @@ class RiverLoading extends LitElement {
           <h4>Loading...</h4>
           <div id="datalist">
             ${usgs}
-            ${historic}
+            ${elkhart}
             <pre style="overflow: auto" class="pink-text text-darken-2">${this.failures}</pre>
           </div>
         </div>
@@ -88,7 +89,7 @@ class RiverLoading extends LitElement {
   }
 
   updated() {
-    if(this.loadedHistoric == true && this.loadedUSGS == true) {
+    if(this.loadedElkhart == true && this.loadedUSGS == true) {
       this.modal.close();
     }
   }

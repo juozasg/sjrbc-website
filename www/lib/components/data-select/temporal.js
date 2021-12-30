@@ -33,7 +33,7 @@ class RiverDataSelectTemporal extends LitElement {
 
     this.fromDatePicker = new AirDatepicker('#fromdate', options);
     
-    this.fromDatePicker.selectDate('1990-01-02 23:59');
+    this.fromDatePicker.selectDate('2007-01-01 00:00');
 
     // TODAY
     this.toDatePicker = new AirDatepicker('#todate', options);

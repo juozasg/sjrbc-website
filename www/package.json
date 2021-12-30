@@ -24,6 +24,7 @@
     "materialize-css": "^1.0.0",
     "plotly": "^1.0.6",
     "seedrandom": "~2.4.3",
+    "timezone-abbr-offsets": "^1.0.2",
     "tippy.js": "^6.3.7"
   }
 }
