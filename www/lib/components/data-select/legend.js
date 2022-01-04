@@ -61,11 +61,6 @@ class RiverDataSelectLegend extends LitElement {
     this.legendContainer.appendChild(label);
   }
 
-  sourceChanged(sourceId) {
-    this.sourceId = sourceId;
-  }
-
-
   render() {
     return html`
       <div id="legend"></div>

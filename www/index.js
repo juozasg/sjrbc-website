@@ -1,4 +1,4 @@
-import "./lib/util/jquery-global.js"
+import "./lib/util/global.js"
 import "materialize-css";
 
 import "./lib/components/river-app.js"

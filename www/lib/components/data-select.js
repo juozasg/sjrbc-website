@@ -38,7 +38,8 @@ class RiverDataSelect extends LitElement {
     this.fromDate = this.temporalSelect.fromDate;
     this.toDate = this.temporalSelect.toDate;
 
-    this.legend.sourceChanged(this.sourceId);
+    this.legend.sourceId = this.sourceId;
+    this.map.sourceId = this.sourceId;
   }
 
   render() {

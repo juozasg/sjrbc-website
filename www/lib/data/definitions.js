@@ -24,7 +24,7 @@ let interpolateBuYlRd = (x) => {
 
 const scales = {
   chlorides: d3.scaleSequential([0, 600], d3.interpolateGreens),
-  datainfo: d3.scaleSequential([90, 0], d3.interpolateMagma),
+  datainfo: d3.scaleSequential([365, 0], d3.interpolateMagma),
   do: d3.scaleSequential([0, 100], d3.interpolateGreens),
   ecoli: d3.scaleSequential([0, 1000], d3.interpolateYlOrBr),
  

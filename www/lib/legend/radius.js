@@ -63,7 +63,7 @@ export function samplingFrequencyRadiusLegend(colorScale) {
 
   const longNames = ['Yearly', 'Monthly', 'Weekly', 'Daily', 'Real-time'];
   const names = ['Y', 'M', 'W', 'D', 'RT'];
-  const freqInDays = [265, 30, 7, 1, 0];
+  const freqInDays = [365, 30, 7, 1, 0];
  
   // data density values: [0, 1, 2, 3, 4, 5]
   const svg = createSvg();

@@ -8,7 +8,7 @@ import * as df from 'data-forge';
 
 import tzAbbr from 'timezone-abbr-offsets';
 
-import {safeID} from '../util/data-helpers.js'
+import {safeID, betweenDays} from '../util/data-helpers.js'
 import {timer} from '../util/debug.js'
 
 import Papa from 'papaparse';
@@ -20,8 +20,21 @@ window.df = df;
 export class Model {
   constructor() {
     window.model = this;
-    // { siteID => {name,lat,lon,feature,df}}
+    // { siteId => {name,lat,lon,feature,df}}
     this.sites = {}
+  }
+
+
+  getValue(siteId, seriesId) {
+    try {
+      if(seriesId == 'datainfo') {
+        return this.sites[siteId].datainfo;
+      }
+      let df = this.sites[siteId].df;
+      return df.getSeries(seriesId).last();
+    } catch (error) {
+      return undefined;
+    }
   }
 
   async processUSGSSites(data) {
@@ -31,14 +44,13 @@ export class Model {
       let columns = {}
 
       const siteCode = ts.sourceInfo.siteCode[0].value;
-      let siteID = `usgs-${siteCode}`;
-      if(!this.sites[siteID]) {
+      let siteId = `usgs-${siteCode}`;
+      if(!this.sites[siteId]) {
         const feature = {};
-        feature.id = siteID;
+        feature.id = siteId;
 
         const loc = ts.sourceInfo.geoLocation.geogLocation;
         feature.type = 'Feature';
-        feature.id = columns.SiteID;
         feature.geometry = {
           type: "Point",
           coordinates: [
@@ -47,13 +59,17 @@ export class Model {
           ]
         };
 
-        this.sites[siteID] = {
-          siteID: siteID,
+        this.sites[siteId] = {
+          siteId: siteId,
           siteName: ts.sourceInfo.siteName,
           lat: feature.geometry.coordinates[1],
           lon: feature.geometry.coordinates[0],
           feature: feature,
-          df: new df.DataFrame({})
+          df: new df.DataFrame({}),
+          datainfo: {
+            frequency: 'RT',
+            lastObservation: 0
+          }
         };
       }
     });
@@ -72,10 +88,6 @@ export class Model {
     }).data;
 
     // t1.stop();
-
-    // allFlow = [];
-    // allHeight = [];
-
 
     // TODO: multi-section, multivar parsing
     // may not work with all sites
@@ -100,8 +112,8 @@ export class Model {
         return;
       }
 
-      let siteID = 'usgs-' + row[siteCol];
-      if(this.sites[siteID]) {
+      let siteId = 'usgs-' + row[siteCol];
+      if(this.sites[siteId]) {
         let tzOffset = tzAbbr[row[tzCol]];
         let dateStr = row[dateCol] + tzOffset;
 
@@ -111,17 +123,17 @@ export class Model {
           height: parseFloat(row[heightCol])
         };
 
-        if(!siteDfCols[siteID]) {
-          siteDfCols[siteID] = [];
+        if(!siteDfCols[siteId]) {
+          siteDfCols[siteId] = [];
         }
 
-        siteDfCols[siteID].push(columns);
+        siteDfCols[siteId].push(columns);
       }
     });
 
-    for (const [siteID, dfCols] of Object.entries(siteDfCols)) {
+    for (const [siteId, dfCols] of Object.entries(siteDfCols)) {
       let dframe = new df.DataFrame(dfCols).setIndex('date')
-      this.sites[siteID].df = this.sites[siteID].df.concat(dframe).bake();
+      this.sites[siteId].df = this.sites[siteId].df.concat(dframe).bake();
     }
     // this.printStatistics();
   }
@@ -150,17 +162,21 @@ export class Model {
       delete feature.properties;
 
       // "Christiana Creek - CR 4" -> "elkhart-Christiana-Creek-CR-4"
-      const siteID = 'elkhart-' + safeID(props.Site_Location_Name);
-      if(!this.sites[siteID]) {
-        feature.id = siteID;
+      const siteId = 'elkhart-' + safeID(props.Site_Location_Name);
+      if(!this.sites[siteId]) {
+        feature.id = siteId;
         let dframe = new df.DataFrame({columnNames: ['date'], rows: []}).setIndex('date');
-        this.sites[siteID] = {
-          siteID: siteID,
+        this.sites[siteId] = {
+          siteId: siteId,
           siteName: props.Site_Location_Name,
           lat: feature.geometry.coordinates[1],
           lon: feature.geometry.coordinates[0],
           feature: feature,
-          df: dframe
+          df: dframe,
+          datainfo: {
+            frequency: 'W',
+            lastObservation: 0
+          }
         };
       }    
 
@@ -182,9 +198,27 @@ export class Model {
       }
 
       let dframe = new df.DataFrame([columns]).setIndex('date')
-      this.sites[siteID].df = this.sites[siteID].df.merge(dframe);
+      this.sites[siteId].df = this.sites[siteId].df.merge(dframe);
     });
 
+    // find days since last observation
+    let now = new Date(_.now());
+    _.mapValues(this.sites, (site) => {
+      let df = site.df;
+      site.datainfo.lastObservation = betweenDays(df.getSeries('date').last(), now);
+      // console.log(`${site.siteId}: ${site.datainfo.lastObservation} -- ${df.getSeries('date').last()}`);
+    });
+  }
+
+  // turn all the sites into a geojson feature collection
+  siteFeatureCollection() {
+    const featureCollection = {
+      type: 'FeatureCollection',
+      features: _.values(_.mapValues(this.sites, 'feature'))
+    };
+
+
+    return featureCollection;
   }
 
   printStatistics() {

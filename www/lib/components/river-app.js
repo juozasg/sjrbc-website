@@ -1,5 +1,5 @@
 import {LitElement, html} from 'lit';
-import {customElement} from 'lit/decorators.js';
+import {customElement, query} from 'lit/decorators.js';
 
 import './map.js'
 import './data-select.js'
@@ -8,6 +8,11 @@ import './timeseries.js'
 
 @customElement('river-app')
 class RiverApp extends LitElement {
+
+  @query('river-data-select') dataSelect;
+  @query('river-map') map;
+
+
   // no Shadow DOM for Materialize CSS
   createRenderRoot() {
     return this;
@@ -22,6 +27,10 @@ class RiverApp extends LitElement {
         <river-timeseries></river-timeseries>
       </main>
     `;
+  }
+
+  firstUpdated() {
+    this.dataSelect.map = this.map;
   }
 }
 
