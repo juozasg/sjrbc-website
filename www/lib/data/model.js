@@ -58,24 +58,31 @@ export class Model {
       }
     });
 
-    console.log(this.sites);
+    // console.log(this.sites);
+
 
   }
 
   async processUSGSSiteData(data) {
-    let t1 = timer('USGS Papa parse')
+    // let t1 = timer('USGS Papa parse')
 
     let rows = Papa.parse(data, {
       delimiter: "\t",
       comments: "#"
     }).data;
 
-    t1.stop();
+    // t1.stop();
+
+    // allFlow = [];
+    // allHeight = [];
 
 
+    // TODO: multi-section, multivar parsing
     // may not work with all sites
     // each TS_ID section in the RDB data should be parsed separately
     // and columns calculated from the headers
+    // this would allow to include 00010 (water temperature) for those sites
+    // which have it
     const agencyCol = 0;
     const siteCol = 1;
     const dateCol = 2;
@@ -83,7 +90,10 @@ export class Model {
     const flowCol = 4; // "TS_ID_00060"
     const heightCol = 6; // "TS_ID_00065"
 
-    let t2 = timer('USGS build df');
+
+    const siteDfCols = {}
+
+    // let t2 = timer('USGS build df');
     rows.forEach(row => {
       // some rows have headers
       if(row[agencyCol] != 'USGS') {
@@ -95,20 +105,25 @@ export class Model {
         let tzOffset = tzAbbr[row[tzCol]];
         let dateStr = row[dateCol] + tzOffset;
 
-
         let columns = {
           date: new Date(Date.parse(dateStr)),
           flow: parseFloat(row[flowCol]),
           height: parseFloat(row[heightCol])
         };
 
-        let dframe = new df.DataFrame([columns]).setIndex('date')
-        // TODO: optimize as needed
-        this.sites[siteID].df = this.sites[siteID].df.concat(dframe);
+        if(!siteDfCols[siteID]) {
+          siteDfCols[siteID] = [];
+        }
+
+        siteDfCols[siteID].push(columns);
       }
     });
 
-    t2.stop();
+    for (const [siteID, dfCols] of Object.entries(siteDfCols)) {
+      let dframe = new df.DataFrame(dfCols).setIndex('date')
+      this.sites[siteID].df = this.sites[siteID].df.concat(dframe).bake();
+    }
+    // this.printStatistics();
   }
 
 
@@ -170,14 +185,15 @@ export class Model {
       this.sites[siteID].df = this.sites[siteID].df.merge(dframe);
     });
 
-    // this.printStatistics();
   }
 
   printStatistics() {
     // get ranges
     let allSeries = {}
     for (const [id, site] of Object.entries(this.sites)) {
+
       for (const column of site.df.getColumns()) {
+        console.log(column);
         const name = column.name;
         const series = column.series;
         console.log(name);

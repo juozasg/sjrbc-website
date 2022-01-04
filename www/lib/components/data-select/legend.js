@@ -7,6 +7,9 @@ window.d3 = d3;
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 
+
+import {scales, labels} from "../../data/definitions.js";
+
 import {measurementScaleLegend} from  '../../legend/scale.js';
 import {measurementRadiusLegend, samplingFrequencyRadiusLegend} from  '../../legend/radius.js';
 
@@ -26,23 +29,15 @@ class RiverDataSelectLegend extends LitElement {
       return;
     }
 
-    let colorScale;
-    if(this.sourceId == 'datainfo') {
-      // 90 to 0 days last measurement currency
-      colorScale = d3.scaleSequential([90, 0], d3.interpolateMagma);
-    } else {
-      colorScale = d3.scaleSequential([0, 5000], d3.interpolateBuPu);
-    }
-
-    const averageColor = colorScale.copy().domain([0, 1])(0.5);
+    let colorScale = scales[this.sourceId];
 
     // COLOR SCALE
     let scaleLegend = measurementScaleLegend(colorScale)
     this.legendContainer.appendChild(scaleLegend);
 
-    // let label;
+    let label;
     if(this.sourceId == 'datainfo') {
-      let label = document.createElement('h6');
+      label = document.createElement('h6');
       label.innerText = 'Days since last observation';
       label.setAttribute('class', 'datainfo-color-label');
       this.legendContainer.appendChild(label);
@@ -59,7 +54,7 @@ class RiverDataSelectLegend extends LitElement {
       label.innerText = 'Site sampling frequency';
     } else {
       radiusLegend = measurementRadiusLegend(colorScale);
-      label.innerText = this.sourceId;
+      label.innerText = labels[this.sourceId];
     }
 
     this.legendContainer.appendChild(radiusLegend);
@@ -68,8 +63,6 @@ class RiverDataSelectLegend extends LitElement {
 
   sourceChanged(sourceId) {
     this.sourceId = sourceId;
-
-    // architect the whole legend thing to be good and work with data
   }
 
 

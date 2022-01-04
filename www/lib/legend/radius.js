@@ -48,6 +48,7 @@ export function measurementRadiusLegend(colorScale) {
 
   // label
   groups.append("text")
+    .attr('fill', 'black')
     .attr("text-anchor", "middle")
     .attr("y", 40)
     .text((d, i) => Math.floor(measurementUnitScale(i/4.0)));

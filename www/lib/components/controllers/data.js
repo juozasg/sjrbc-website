@@ -23,6 +23,7 @@ export class DataController {
         .then(() => this.loadUSGSSiteData())
         .then(d => this.model.processUSGSSiteData(d))
         .then(() => this.host.loading.loadedUSGS = true)
+        // .then(() => this.model.printStatistics())
         .catch(e => this.host.loading.failure(e)));
 
     loaders.push(
@@ -54,7 +55,7 @@ export class DataController {
     // const huc8 = '04050001';
     const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
     //const annualUrl = 'https://waterdata.usgs.gov/nwis/annual?referred_module=sw&amp;site_no=04096405&amp;por_04096405_70388=891343,00060,70388,1963,2022&amp;year_type=W&amp;format=rdb&amp;date_format=YYYY-MM-DD&amp;rdb_compression=value&amp;submitted_form=parameter_selection_list';
-    const startDate = '2021-11-30';
+    const startDate = '2021-12-30';
     const endDate = strftime('%F', new Date(Date.now()));
 
     const url = `https://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=${stationIds}&parameterCd=00060,00065&siteStatus=all&startDT=${startDate}&endDT=${endDate}`;

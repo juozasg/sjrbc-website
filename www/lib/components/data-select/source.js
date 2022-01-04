@@ -77,7 +77,7 @@ class RiverDataSelectSource extends LitElement {
 
         <li class="divider" tabindex="-1"></li>
 
-        <li><a @click="${this.sourceSelect}" id="nitrates">Nitrate</a></li>
+        <li><a @click="${this.sourceSelect}" id="nitrates">Nitrates</a></li>
         <li><a @click="${this.sourceSelect}" id="phosphorus">Phosphorus</a></li>
         <li><a @click="${this.sourceSelect}" id="chlorides">Chlorides</a></li>
         <li><a @click="${this.sourceSelect}" id="ph">pH</a></li>
