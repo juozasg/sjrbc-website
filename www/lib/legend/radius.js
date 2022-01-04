@@ -46,12 +46,20 @@ export function measurementRadiusLegend(colorScale) {
   appendRadiusCircle(groups, color)
     .attr('fill', (d,i) => colorUnitScale(i/4.0));
 
-  // label
+
+  // LABEL
   groups.append("text")
     .attr('fill', 'black')
     .attr("text-anchor", "middle")
     .attr("y", 40)
-    .text((d, i) => Math.floor(measurementUnitScale(i/4.0)));
+    .text((d, i) => {
+      let value = measurementUnitScale(i/4.0);
+      if(colorScale.range()[1] > 10) {
+        return Math.floor(value);
+      } else {
+        return value;
+      }
+    });
 
 
   return svg.node();

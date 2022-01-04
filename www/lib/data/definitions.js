@@ -18,26 +18,31 @@ wet [0, 1]   AVG: 0 MEDIAN: 0
 
 import * as d3 from "d3";
 
-let interpolateBuYlRd = (x) => {
+const interpolateBuYlRd = (x) => {
   return d3.interpolateRdYlBu(Math.abs(x - 1.0));
 }
 
+const datainfoScaleTransform = d3.scaleLinear().range([0.2, 1])
+const interpolateDatainfo = (x) => {
+  return d3.interpolateMagma(datainfoScaleTransform(x));
+}
+
 const scales = {
-  chlorides: d3.scaleSequential([0, 600], d3.interpolateGreens),
-  datainfo: d3.scaleSequential([365, 0], d3.interpolateMagma),
-  do: d3.scaleSequential([0, 100], d3.interpolateGreens),
-  ecoli: d3.scaleSequential([0, 1000], d3.interpolateYlOrBr),
+  chlorides: d3.scaleSequential([0, 600], d3.interpolateGreens).clamp(true),
+  datainfo: d3.scaleSequential([365, 0], interpolateDatainfo).clamp(true),
+  do: d3.scaleSequential([0, 100], d3.interpolateGreens).clamp(true),
+  ecoli: d3.scaleSequential([0, 1000], d3.interpolateYlOrBr).clamp(true),
  
-  flow: d3.scaleSequential([0, 8000], d3.interpolateGnBu),
-  height: d3.scaleSequential([0, 30], d3.interpolateBlues),
-  nitrates: d3.scaleSequential([0, 200], d3.interpolatePurples),
-  ph: d3.scaleSequential([5.5, 12.5], d3.interpolateTurbo),
+  flow: d3.scaleSequential([0, 8000], d3.interpolateGnBu).clamp(true),
+  height: d3.scaleSequential([0, 30], d3.interpolateBlues).clamp(true),
+  nitrates: d3.scaleSequential([0, 200], d3.interpolatePurples).clamp(true),
+  ph: d3.scaleSequential([5.5, 12.5], d3.interpolateTurbo).clamp(true),
  
-  phosphorus: d3.scaleSequential([0, 30], d3.interpolateInferno),
-  spc: d3.scaleSequential([0, 2500], d3.interpolateReds),
-  tds: d3.scaleSequential([0, 800], d3.interpolatePuRd),
-  temp: d3.scaleSequential([0, 35], interpolateBuYlRd),
-  tss: d3.scaleSequential([0, 500], d3.interpolateRdPu)
+  phosphorus: d3.scaleSequential([0, 0.5], d3.interpolateInferno).clamp(true),
+  spc: d3.scaleSequential([0, 2500], d3.interpolateReds).clamp(true),
+  tds: d3.scaleSequential([0, 800], d3.interpolatePuRd).clamp(true),
+  temp: d3.scaleSequential([0, 35], interpolateBuYlRd).clamp(true),
+  tss: d3.scaleSequential([0, 500], d3.interpolateRdPu).clamp(true)
 }
 
 
@@ -47,7 +52,7 @@ const labels = {
   do: "Dissolved Oxygen",
   ecoli: "E. Coli",
  
-  flow: "Flow (cu ft/s)",
+  flow: "Flow (ft^3/s)",
   height: "Height (ft)",
   nitrates: "Nitrates",
   ph: "pH",
