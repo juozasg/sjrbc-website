@@ -10,3 +10,7 @@ image:
   name: docker.io/kingdonb/supervisord-nginx:b8e28dce
   context: .
   dockerfile: Dockerfile
+persistentVolume:
+  enabled: true
+  storageClass: standard
+  size: 5Gi
