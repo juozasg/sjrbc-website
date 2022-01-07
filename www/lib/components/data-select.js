@@ -12,7 +12,7 @@ class RiverDataSelect extends LitElement {
   hideReflows = new HideReflowsController(this);
 
   @query('river-data-select-source') sourceSelect;
-  @query('river-data-select-temporal') temporalSelect;
+  //@query('river-data-select-temporal') temporalSelect;
   @query('river-data-select-legend') legend;
 
 
@@ -35,8 +35,8 @@ class RiverDataSelect extends LitElement {
 
   _handleDataSelectChanged(e) {
     this.sourceId = this.sourceSelect.sourceId;
-    this.fromDate = this.temporalSelect.fromDate;
-    this.toDate = this.temporalSelect.toDate;
+    //this.fromDate = this.temporalSelect.fromDate;
+    //this.toDate = this.temporalSelect.toDate;
 
     this.legend.sourceId = this.sourceId;
     this.map.sourceId = this.sourceId;
@@ -47,7 +47,7 @@ class RiverDataSelect extends LitElement {
 
     <div class="card data-select">
       <river-data-select-source></river-data-select-source>
-      <river-data-select-temporal></river-data-select-temporal>
+      <!-- <river-data-select-temporal></river-data-select-temporal> -->
       <river-data-select-legend></river-data-select-legend>
     </div>
     `;

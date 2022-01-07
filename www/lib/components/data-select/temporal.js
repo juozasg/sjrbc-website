@@ -72,8 +72,6 @@ class RiverDataSelectTemporal extends LitElement {
 
   render() {
     return html`
-      <!-- <input type="text" class="datepicker" value="1999-12-30" id="fromdate">
-      <input type="text" class="datepicker" value="10000-12-30" id="todate"> -->
 
       <span class="hint">From</span> 
       <div class="input-field inline">
