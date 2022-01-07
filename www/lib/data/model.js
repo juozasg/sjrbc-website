@@ -60,6 +60,7 @@ export class Model {
         };
 
         this.sites[siteId] = {
+          dataset: 'usgs',
           siteId: siteId,
           siteName: ts.sourceInfo.siteName,
           lat: feature.geometry.coordinates[1],
@@ -167,6 +168,7 @@ export class Model {
         feature.id = siteId;
         let dframe = new df.DataFrame({columnNames: ['date'], rows: []}).setIndex('date');
         this.sites[siteId] = {
+          dataset: 'elkhart',
           siteId: siteId,
           siteName: props.Site_Location_Name,
           lat: feature.geometry.coordinates[1],
@@ -198,15 +200,16 @@ export class Model {
       }
 
       let dframe = new df.DataFrame([columns]).setIndex('date')
-      this.sites[siteId].df = this.sites[siteId].df.merge(dframe);
+      this.sites[siteId].df = this.sites[siteId].df.merge(dframe).bake();
     });
 
     // find days since last observation
     let now = new Date(_.now());
     _.mapValues(this.sites, (site) => {
       let df = site.df;
-      site.datainfo.lastObservation = betweenDays(df.getSeries('date').last(), now);
-      // console.log(`${site.siteId}: ${site.datainfo.lastObservation} -- ${df.getSeries('date').last()}`);
+      if(site.dataset == 'elkhart') {
+        site.datainfo.lastObservation = betweenDays(df.getSeries('date').last(), now);
+      }
     });
   }
 
