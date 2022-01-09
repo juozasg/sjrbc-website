@@ -49,7 +49,7 @@ class RiverDataSelectSource extends LitElement {
 
   async _notifyDataSelectChange() {
     await this.updateComplete;
-    this.dispatchEvent(new CustomEvent('river:data-select.change', {bubbles: true}));
+    this.dispatchEvent(new CustomEvent('river:sourceId.change', {bubbles: true}));
   }
 
   render() {

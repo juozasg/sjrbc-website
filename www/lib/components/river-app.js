@@ -1,6 +1,7 @@
 import {LitElement, html} from 'lit';
 import {customElement, query} from 'lit/decorators.js';
 
+import './toolbar.js'
 import './map.js'
 import './data-select.js'
 import './table.js'
@@ -9,7 +10,14 @@ import './timeseries.js'
 @customElement('river-app')
 class RiverApp extends LitElement {
 
+  @query('river-toolbar') toolbar;
+  @query('river-table') table;
+  @query('river-timeseries') timeseries;
   @query('river-data-select') dataSelect;
+
+  @query('river-data-select-source') sourceSelect;
+  @query('river-data-select-legend') legend;
+
   @query('river-map') map;
 
 
@@ -18,19 +26,48 @@ class RiverApp extends LitElement {
     return this;
   }
 
+  constructor() {
+    super();
+    this.addEventListener('river:sourceId.change', this._handleSourceIdChange);
+    this.addEventListener('river:siteSelection.change', this._handleSiteSelectionChange);
+    this.addEventListener('river:componentVisibility.change', this._handleComponentVisibilityChange);
+
+    this.showTable = false;
+    this.showDataSelect = false;
+    this.showTimeseries = false;
+  }
+
+  _handleSourceIdChange(e) {
+    const sourceId = this.sourceSelect.sourceId;
+
+    this.legend.sourceId = sourceId;
+    this.map.sourceId = sourceId;
+  }
+
+  _handleSiteSelectionChange(e) {
+    const selectedSiteId = this.map.selectedSiteId;
+
+    this.toolbar.selectedSiteId = selectedSiteId;
+  }
+
+  _handleComponentVisibilityChange(e) {
+    this.showTable = this.toolbar.showTable;
+    this.showDataSelect = this.toolbar.showDataSelect;
+    this.showTimeseries = this.toolbar.showTimeseries;
+
+    this.requestUpdate();
+  }
+
   render() {
     return html`
       <main>
         <river-map></river-map>
-        <river-data-select></river-data-select>
-        <river-table></river-table>
-        <river-timeseries></river-timeseries>
+        <river-toolbar></river-toolbar>
+        <river-data-select style="display: ${this.showDataSelect ? 'block' : 'none'}"></river-data-select>
+        <river-table style="display: ${this.showTable ? 'block' : 'none'}"></river-table>
+        <river-timeseries style="display: ${this.showTimeseries ? 'block' : 'none'}"></river-timeseries>
       </main>
     `;
-  }
-
-  firstUpdated() {
-    this.dataSelect.map = this.map;
   }
 }
 

@@ -53,7 +53,7 @@ class RiverDataSelectTemporal extends LitElement {
 
   async _notifyDataSelectChange() {
     await this.updateComplete;
-    this.dispatchEvent(new CustomEvent('river:data-select.change', {bubbles: true}));
+    this.dispatchEvent(new CustomEvent('river:temporalExtent.change', {bubbles: true}));
   }
 
   dateInputChange(newDate, datePicker) {

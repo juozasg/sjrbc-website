@@ -9,43 +9,25 @@ import './data-select/legend.js';
 
 @customElement('river-data-select')
 class RiverDataSelect extends LitElement {
-  hideReflows = new HideReflowsController(this);
-
-  @query('river-data-select-source') sourceSelect;
-  //@query('river-data-select-temporal') temporalSelect;
-  @query('river-data-select-legend') legend;
-
+  //hideReflows = new HideReflowsController(this);
 
   @property() sourceId;
   @property({type: Object}) fromDate; // Date object
   @property({type: Object}) toDate;
-
-  constructor() {
-    super();
-    this.addEventListener('river:data-select.change', this._handleDataSelectChanged);
-  }
 
   createRenderRoot() {
     return this;
   }
 
   firstUpdated() {
-    this.hideReflows.slideDown();
-  }
-
-  _handleDataSelectChanged(e) {
-    this.sourceId = this.sourceSelect.sourceId;
-    //this.fromDate = this.temporalSelect.fromDate;
-    //this.toDate = this.temporalSelect.toDate;
-
-    this.legend.sourceId = this.sourceId;
-    this.map.sourceId = this.sourceId;
+    //this.hideReflows.slideDown();
   }
 
   render() {
+    const opacity = this.show ? '1' : '0';
     return html`
 
-    <div class="card data-select">
+    <div class="card" id="data-select">
       <river-data-select-source></river-data-select-source>
       <!-- <river-data-select-temporal></river-data-select-temporal> -->
       <river-data-select-legend></river-data-select-legend>

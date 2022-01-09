@@ -86,7 +86,8 @@ class RiverMap extends LitElement {
 
   firstUpdated() {
     this.map = new LeafletMap(this.querySelector('#map'), {
-      minZoom: 2
+      minZoom: 2,
+      zoomControl: false
     });
 
     this.map.setView([41.55,-85.8], 10);
@@ -96,11 +97,13 @@ class RiverMap extends LitElement {
     this.loadBasemaps();
     this.data.load();
     this.basemaps['Topographic'].addTo(this.map);
-    this.layersControl = new Control.Layers(this.basemaps);
-    this.layersControl.addTo(this.map);
 
+    this.controlZoom = new Control.Zoom({position: 'topright'});
+    this.controlLayers = new Control.Layers(this.basemaps);
 
-    window.rm = this;
+    this.controlLayers.addTo(this.map);
+    this.controlZoom.addTo(this.map);
+
   }
 
   loadBasemaps() {
@@ -129,7 +132,7 @@ class RiverMap extends LitElement {
       }
     }).addTo(this.map);
 
-    this.layersControl.addOverlay(this.featureLayer, "Sites");
+    this.controlLayers.addOverlay(this.featureLayer, "Sites");
 
     this.updated();
 

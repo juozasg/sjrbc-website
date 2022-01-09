@@ -37,7 +37,8 @@ export class DataController {
 
   async loadUSGSSites() {
     const huc8 = '04050001';
-    const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
+    // const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
+    const stationIds = '04096405';//,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
     //const annualUrl = 'https://waterdata.usgs.gov/nwis/annual?referred_module=sw&amp;site_no=04096405&amp;por_04096405_70388=891343,00060,70388,1963,2022&amp;year_type=W&amp;format=rdb&amp;date_format=YYYY-MM-DD&amp;rdb_compression=value&amp;submitted_form=parameter_selection_list';
     const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${stationIds}&siteStatus=all`;
 
@@ -53,7 +54,8 @@ export class DataController {
 
   async loadUSGSSiteData() {
     // const huc8 = '04050001';
-    const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
+    // const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
+    const stationIds = '04096405';
     //const annualUrl = 'https://waterdata.usgs.gov/nwis/annual?referred_module=sw&amp;site_no=04096405&amp;por_04096405_70388=891343,00060,70388,1963,2022&amp;year_type=W&amp;format=rdb&amp;date_format=YYYY-MM-DD&amp;rdb_compression=value&amp;submitted_form=parameter_selection_list';
     const startDate = '2021-12-30';
     const endDate = strftime('%F', new Date(Date.now()));
@@ -76,7 +78,8 @@ export class DataController {
 
     return new Promise((resolve, reject) => {
       new Query({
-        url: featureService
+        url: featureService,
+        limit: 5
       }).run((error, featureCollection, response) => {
         if(error) {
           reject(new Error(`Failed to load: ${featureService}\nbecause ${JSON.stringify(error)}`));

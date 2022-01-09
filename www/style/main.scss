@@ -42,7 +42,7 @@ input, text, .numeric {
   @extend .purple, .darken-1;
 }
 
-.card.data-select {
+#data-select {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -74,10 +74,83 @@ input, text, .numeric {
   }
 }
 
-#dataview {
-  // display: none;
+#toolbar {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  // border: 2px solid rgba(0,0,0,0.2);
+  z-index: 10000;
+  background: rgba(255, 255, 255, 1);
 
-  // background-color: aquamarine;
+  padding: 0.5rem;
+  margin-top: 10px;
+
+  user-select: none;
+
+  #status {
+    font-weight: 600;
+    vertical-align: middle;
+    margin-left: 6px;
+    padding-left: 6px;
+    border-left: 2px solid #004d40;
+
+    user-select: text;
+  }
+
+  .material-icons {
+    font-size: 1.5rem;
+    vertical-align: middle;
+    // border-right: 1px solid gray;
+    border-radius: 4px;
+    padding: 3px 3px;
+
+
+    &:hover {
+      @extend .purple, .accent-3;
+      color: #fff;
+
+      cursor: pointer;
+    }
+
+    &[active] {
+      @extend .purple, .darken-2;
+      color: #fff;
+    }
+
+    &[active]:hover {
+      background-color: #ea80fc !important;
+    }
+  }
+}
+
+#table {
+  width: 424px;
+  height: 400px;
+
+  background: rgba(255,255,255,0.9);
+  position: absolute;
+  box-sizing: content-box;
+  bottom: 300px;
+  left: 12px;
+
+  z-index: 10000;
+
+  padding: 1rem;
+}
+
+#timeseries {
+  width: 1000px;
+  height: 248px;
+
+  background: rgba(255,255,255,0.9);
+  position: absolute;
+  box-sizing: content-box;
+  bottom: 12px;
+  left: 476px;
+
+  z-index: 10000;
+
+  padding: 1rem;
 }
 
 #legend {
@@ -180,6 +253,19 @@ input, text, .numeric {
   h5 {
     margin-top: 3rem;
   }
+  z-index: 10001 !important;
 }
+
+
+// .leaflet-control-container { 
+//   position: absolute;
+//   right: 60px;
+
+//   // .leaflet-control-layers {
+//   //   margin-right: 52px !important;
+//   // }
+
+// } 
+
 
 #ree {background-color: red;}
