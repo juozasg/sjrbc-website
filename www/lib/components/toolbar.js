@@ -42,8 +42,8 @@ class RiverToolbar extends LitElement {
   render() {
     return html`
     <div id="toolbar" class="card">
-      <span @click="${() => this.toggle('showHelp')}"
-        ?active=${this.showHelp} class="material-icons">help_outline</span>
+      <span @click="${() => alert('TODO: help and instructions')}"
+         class="material-icons">help_outline</span>
 
       <span @click="${() => this.toggle('showTable')}"
         ?active=${this.showTable} class="material-icons">view_list</span>

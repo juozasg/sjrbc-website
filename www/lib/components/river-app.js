@@ -63,9 +63,15 @@ class RiverApp extends LitElement {
       <main>
         <river-map></river-map>
         <river-toolbar></river-toolbar>
-        <river-data-select style="display: ${this.showDataSelect ? 'block' : 'none'}"></river-data-select>
-        <river-table style="display: ${this.showTable ? 'block' : 'none'}"></river-table>
-        <river-timeseries style="display: ${this.showTimeseries ? 'block' : 'none'}"></river-timeseries>
+        <div class="ui-layout">
+          <div class="ui-top">
+            <river-table style="display: ${this.showTable ? 'block' : 'none'}"></river-table>
+          </div>
+          <div class="ui-bottom">
+            <river-data-select class="ui-bottom-left" style="display: ${this.showDataSelect ? 'block' : 'none'}"></river-data-select>
+            <river-timeseries class="ui-bottom-right" style="display: ${this.showTimeseries ? 'block' : 'none'}"></river-timeseries>
+          </div>
+        </div>
       </main>
     `;
   }
