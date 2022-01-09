@@ -13,6 +13,8 @@ import {DataController} from './controllers/data.js'
 import {scales} from "../data/definitions.js";
 import {radiusRange} from '../data/enums.js';
 
+import {model} from  "../data/model.js";
+
 
 
 
@@ -38,7 +40,7 @@ class RiverMap extends LitElement {
     }
 
     this.featureLayer.setStyle((feature) => {
-      let value = this.model.getValue(feature.id, this.sourceId);
+      let value = model.getValue(feature.id, this.sourceId);
       if(!value) {
         return {fillOpacity:0, stroke: false};
       }
@@ -118,16 +120,14 @@ class RiverMap extends LitElement {
 
   }
 
-  modelToLayers(model) {
-    this.model = model;
-
+  modelToLayers() {
     this.featureCollection = model.siteFeatureCollection();
 
     this.featureLayer = new GeoJSON(this.featureCollection,{
       pointToLayer: (p, latlng) => {
         return L.circleMarker(latlng).on('click', () => {
           console.log(p);
-          console.log(this.model.sites[p.id]);
+          console.log(model.sites[p.id]);
         });
       }
     }).addTo(this.map);

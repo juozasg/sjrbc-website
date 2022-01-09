@@ -42,10 +42,18 @@ input, text, .numeric {
   @extend .purple, .darken-1;
 }
 
-#toolbar {
+#toolbar-container {
   position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+}
+
+#toolbar {
+  flex-grow: 0;
   // border: 2px solid rgba(0,0,0,0.2);
   z-index: 10002;
   background: rgba(255, 255, 255, 1);
@@ -57,12 +65,20 @@ input, text, .numeric {
 
   #status {
     font-weight: 600;
-    vertical-align: middle;
+    vertical-align: text-top;
     margin-left: 6px;
     padding-left: 6px;
     border-left: 2px solid #004d40;
 
-    user-select: text;
+    .text {
+      user-select: text;
+    }
+  }
+  .add-to-left-right {
+    display: none;
+    &[show] {
+      display: inline;
+    }
   }
 
   .material-icons {
@@ -88,6 +104,20 @@ input, text, .numeric {
     &[active]:hover {
       background-color: #ea80fc !important;
     }
+
+    &.timeline-hint {
+
+      // color: grey;
+      @extend .purple-text, .text-lighten-3;
+
+      margin-left: -6px;
+      margin-right: -6px;
+
+      &:hover {
+        background-color: white !important;
+
+      }
+    }
   }
 }
 
@@ -100,14 +130,22 @@ input, text, .numeric {
 
   z-index: 10000;
 
-  background-color: rgba(yellowgreen, 0.5);
+  // background-color: rgba(yellowgreen, 0.5);
 
   display: flex;
   flex-direction: column;
 
+  pointer-events: none;
+  river-table, river-data-select, river-timeseries {
+    pointer-events: auto;
+  }
+
   .ui-top {
     flex-grow: 1;
-    background-color: rgba(red, 0.5);
+    width: 464px;
+
+    padding-bottom: 6px;
+    padding-left: 6px;
 
     river-table {
       height: 100%;
@@ -116,33 +154,35 @@ input, text, .numeric {
   }
 
   .ui-bottom {
-    background-color: rgba(blue, 0.5);
-
     flex-grow: 0;
     display: flex;
 
     .ui-bottom-left {
-      border: 1px solid orchid;
       flex-grow: 0;
+      padding-left: 6px;
+      padding-bottom: 14px;
     }
 
     .ui-bottom-right {
-      border: 1px solid rebeccapurple;
-
       flex-grow: 1;
+      padding-left: 6px;
+      padding-right: 6px;
     }
 
   }
 }
 
 #data-select {
+  width: 464px;
+  height: 292px;
+
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
 
   // position: absolute;
   margin: 0;
-  box-sizing: border-box;
+  // box-sizing: border-box;
 
   // bottom: 12px;
   // left: 12px;
@@ -170,11 +210,11 @@ input, text, .numeric {
 
 
 #table {
-  width: 424px;
+  width: 464px;
   height: 100%;
-  box-sizing: border-box;
+  // box-sizing: border-box;
 
-  border: 1px solid saddlebrown;
+  // border: 1px solid saddlebrown;
   margin: 0;
 
   background: rgba(255,255,255,0.9);
@@ -184,15 +224,16 @@ input, text, .numeric {
 
   z-index: 10000;
 
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 #timeseries {
   width: 100%;
-  box-sizing: border-box;
+  height: 292px;
+  // box-sizing: border-box;
   margin: 0;
 
-  height: 100%;
+
 
   background: rgba(255,255,255,0.9);
   // position: absolute;

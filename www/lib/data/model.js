@@ -19,7 +19,6 @@ window.df = df;
 
 export class Model {
   constructor() {
-    window.model = this;
     // { siteId => {name,lat,lon,feature,df}}
     this.sites = {}
   }
@@ -249,3 +248,8 @@ export class Model {
     // window.allSeries = allSeries;
   }
 }
+
+const model = new Model();
+window.model = model;
+
+export {model};

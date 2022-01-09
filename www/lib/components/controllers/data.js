@@ -1,6 +1,6 @@
 import { FeatureLayer, Query } from "esri-leaflet";
 
-import {Model} from  "../../data/model.js";
+import {model} from  "../../data/model.js";
 
 import strftime from "../../util/strftime.js"
 
@@ -12,27 +12,26 @@ export class DataController {
   constructor(host) {
     this.host = host;
     host.addController(this);
-    this.model = new Model();
   }
 
   async load() {
     const loaders = []
     loaders.push(
       this.loadUSGSSites()
-        .then(d => this.model.processUSGSSites(d))
+        .then(d => model.processUSGSSites(d))
         .then(() => this.loadUSGSSiteData())
-        .then(d => this.model.processUSGSSiteData(d))
+        .then(d => model.processUSGSSiteData(d))
         .then(() => this.host.loading.loadedUSGS = true)
-        // .then(() => this.model.printStatistics())
+        // .then(() => model.printStatistics())
         .catch(e => this.host.loading.failure(e)));
 
     loaders.push(
       this.loadElkhart()
-      .then(d => this.model.processElkhart(d))
+      .then(d => model.processElkhart(d))
       .then(() => this.host.loading.loadedElkhart = true)
       .catch(e => this.host.loading.failure(e)));
 
-    Promise.all(loaders).then(() => this.host.modelToLayers(this.model));
+    Promise.all(loaders).then(() => this.host.modelToLayers());
   }
 
   async loadUSGSSites() {

@@ -42,6 +42,7 @@ class RiverApp extends LitElement {
 
     this.legend.sourceId = sourceId;
     this.map.sourceId = sourceId;
+    this.toolbar.sourceId = sourceId;
   }
 
   _handleSiteSelectionChange(e) {
