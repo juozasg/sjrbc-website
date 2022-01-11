@@ -32,6 +32,9 @@ class RiverApp extends LitElement {
     this.addEventListener('river:siteSelection.change', this._handleSiteSelectionChange);
     this.addEventListener('river:componentVisibility.change', this._handleComponentVisibilityChange);
 
+    this.addEventListener('river:siteSelectionAddToLeft.click', this._addSitesToLeft);
+    this.addEventListener('river:siteSelectionAddToRight.click', this._addSitesToRight);
+
     this.showTable = false;
     this.showDataSelect = false;
     this.showTimeseries = false;
