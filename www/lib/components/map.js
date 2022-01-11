@@ -66,11 +66,20 @@ class RiverMap extends observeState(LitElement) {
         radius = radiusScale(value);
       }
 
+      const selected = app.siteIsSelected(feature.id)
+
+
+      // TODO: fix site selection symbolization
+      // TODO: rethink symbolization more
+      // let contrast = d3.hsl(color).l > 0.5 ? "#000" : "#fff"
+      // console.log(contrast);
       return {
         fillColor: color,
         stroke: true,
-        color: 'black',
-        weight: 2,
+        color: selected ? 'gray' : 'black',
+        weight: selected ? 3 : 2,
+        dashArray: selected ? '3 6' : null,
+        // dashOffset: 14,
         fillOpacity: 0.9,
         radius: radius
       }
@@ -79,6 +88,8 @@ class RiverMap extends observeState(LitElement) {
 
   render() {
     stateRecorder.recordRead(app, 'selectedSeries');
+    stateRecorder.recordRead(app, 'selectedSites');
+
     return html`
     <river-loading></river-loading>
 
@@ -121,10 +132,9 @@ class RiverMap extends observeState(LitElement) {
     this.featureCollection = model.siteFeatureCollection();
 
     this.featureLayer = new GeoJSON(this.featureCollection,{
-      pointToLayer: (p, latlng) => {
+      pointToLayer: (feature, latlng) => {
         return L.circleMarker(latlng).on('click', () => {
-          console.log(p);
-          console.log(model.sites[p.id]);
+          app.toggleSiteSelection(feature.id);
         });
       }
     }).addTo(this.map);

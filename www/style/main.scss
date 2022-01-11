@@ -74,7 +74,8 @@ input, text, .numeric {
       user-select: text;
     }
   }
-  .add-to-left-right {
+
+  .selected-actions {
     display: none;
     &[show] {
       display: inline;
