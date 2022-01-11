@@ -1,11 +1,22 @@
 import {LitElement, html} from 'lit'; 
 import {customElement, queryAll, property} from 'lit/decorators.js';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
+
+
+import {observeState} from 'lit-element-state';
+
+import * as d3 from "d3";
+
+
+import {app} from '../state/app.js';
+import {model} from '../data/model.js';
+
+import {labels} from "../data/definitions.js";
+
+
 
 @customElement('river-table')
-class RiverTable extends LitElement {
-  @property({attribute: false}) modal; 
-  @queryAll('.modal') modalEls;
-
+class RiverTable extends observeState(LitElement) {
   createRenderRoot() {
     return this;
   }
@@ -15,9 +26,40 @@ class RiverTable extends LitElement {
   }
 
   render() {
+    let table = "";
+
+    if(app.selectedSites.length > 0) {
+      for (key in labels) {
+        var name = labels[key];
+    
+        let values = []
+        for(i in app.selectedSites) {
+          let site = app.selectedSites[i];
+          let val = model.getValue(site, key);
+          if(val) {
+            values.push(val);
+          }
+        }
+
+        let mean = d3.mean(values);
+        
+        if(mean) {
+          let tr = "<tr>";
+          tr += "<td>" + name + "</td>";
+          tr += "<td>" + mean.toString() + "</td></tr>";
+      
+          table += tr;
+        }
+      }
+    }
+
     return html`
       <div id="table" class="card">
-      <h3>Here goes data table</h3>
+      <h5>Site Summary</h5>
+        <ul>
+          ${_(app.selectedSites).map((site) => html`<li><b>${model.sites[site].siteName}</b></li>`)}
+        </ul>
+        ${unsafeHTML(table)}
       </div>
     `;
   }

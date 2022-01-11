@@ -141,6 +141,9 @@ class RiverMap extends observeState(LitElement) {
 
     this.controlLayers.addOverlay(this.featureLayer, "Sites");
 
+    // TODO: remove debugging code
+    app.selectedSites = ['elkhart-Elkhart-River-CR-43'];
+
     this.updated();
   }
 }

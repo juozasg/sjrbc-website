@@ -1,11 +1,11 @@
 import { LitState, stateVar } from 'lit-element-state';
 
 class AppState extends LitState {
-  @stateVar() showTable = false;
+  @stateVar() showTable = true;
   @stateVar() showDataSelect = true;
   @stateVar() showTimeseries = false;
 
-  @stateVar() selectedSeries = 'datainfo';
+  @stateVar() selectedSeries = 'ph';
   @stateVar() selectedSites = [];
 
   toggleSiteSelection(siteId) {
