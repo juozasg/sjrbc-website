@@ -1,10 +1,13 @@
 import {LitElement, html} from 'lit'; 
 import {customElement, property, query} from 'lit/decorators.js';
+import {observeState, stateRecorder} from 'lit-element-state';
 
 import 'leaflet/dist/leaflet.css';
 
-import { Map as LeafletMap, Icon, Marker, Control, GeoJSON } from "leaflet";
-import { vectorBasemapLayer } from "esri-leaflet-vector";
+import {Map as LeafletMap, Icon, Marker, Control, GeoJSON} from "leaflet";
+import {vectorBasemapLayer} from "esri-leaflet-vector";
+
+import * as d3 from "d3";
 
 import './loading.js'
 
@@ -14,17 +17,12 @@ import {scales} from "../data/definitions.js";
 import {radiusRange} from '../data/enums.js';
 
 import {model} from  "../data/model.js";
-
-
+import {app} from '../state/app.js';
 
 
 @customElement('river-map')
-class RiverMap extends LitElement {
+class RiverMap extends observeState(LitElement) {
   @query('river-loading') loading;
-  
-  @property() sourceId;
-  @property({type: Object}) fromDate; // Date object
-  @property({type: Object}) toDate;
 
   apiKey = "AAPK3dfaa40a13c0404983142c26b566596ammsJLVROPRkVaZnrwj6bYIrYdi4FEikx7NZpYg7f5M9XlV2RFL6PgxMA_56IceHv";
   data = new DataController(this);
@@ -35,23 +33,25 @@ class RiverMap extends LitElement {
 
   updated() {
     // source parameters changed. update the style
-    if(!this.featureLayer) {
-      return;
+    if(this.featureLayer) {
+      this.updateSymbology();
     }
+  }
 
+  updateSymbology() {
     this.featureLayer.setStyle((feature) => {
-      let value = model.getValue(feature.id, this.sourceId);
+      let value = model.getValue(feature.id, app.selectedSeries);
       if(!value) {
         return {fillOpacity:0, stroke: false};
       }
 
       let color, radius;
 
-      if(this.sourceId == 'datainfo') {
+      if(app.selectedSeries == 'datainfo') {
         let frequency = value.frequency;
         let daysSince = value.lastObservation;
         
-        let colorScale = scales[this.sourceId];
+        let colorScale = scales[app.selectedSeries];
         color = colorScale(daysSince);
 
         // Y..RT -> 0..1
@@ -59,7 +59,7 @@ class RiverMap extends LitElement {
         radius = d3.scaleLinear().clamp(true).range(radiusRange)(frequencyUnit);
       } else {
 
-        let colorScale = scales[this.sourceId];
+        let colorScale = scales[app.selectedSeries];
         color = colorScale(value);
 
         let radiusScale = colorScale.copy().clamp(true).range(radiusRange);
@@ -73,12 +73,12 @@ class RiverMap extends LitElement {
         weight: 2,
         fillOpacity: 0.9,
         radius: radius
-      }});
-
-    console.log(this.sourceId);
+      }
+    });
   }
 
   render() {
+    stateRecorder.recordRead(app, 'selectedSeries');
     return html`
     <river-loading></river-loading>
 
@@ -94,8 +94,6 @@ class RiverMap extends LitElement {
 
     this.map.setView([41.55,-85.8], 10);
 
-    //this.map.on('layeradd', () => console.log('layer add'));
-
     this.loadBasemaps();
     this.data.load();
     this.basemaps['Topographic'].addTo(this.map);
@@ -105,7 +103,6 @@ class RiverMap extends LitElement {
 
     this.controlLayers.addTo(this.map);
     this.controlZoom.addTo(this.map);
-
   }
 
   loadBasemaps() {
@@ -135,8 +132,5 @@ class RiverMap extends LitElement {
     this.controlLayers.addOverlay(this.featureLayer, "Sites");
 
     this.updated();
-
-    // console.log(this.featureCollection);
-
   }
 }

@@ -38,7 +38,7 @@ input, text, .numeric {
   text-shadow: 0px 2px 1px rgba(255,255,255,0.85);
 }
 
-.btn.active {
+.btn[active] {
   @extend .purple, .darken-1;
 }
 
@@ -129,9 +129,6 @@ input, text, .numeric {
   bottom: 0;
 
   z-index: 10000;
-
-  // background-color: rgba(yellowgreen, 0.5);
-
   display: flex;
   flex-direction: column;
 
@@ -143,9 +140,6 @@ input, text, .numeric {
   .ui-top {
     flex-grow: 1;
     width: 464px;
-
-    // padding-bottom: 6px;
-    // padding-left: 6px;
 
     river-table {
       height: 100%;
@@ -162,15 +156,11 @@ input, text, .numeric {
       padding-top: 4px;
       padding-right: 4px;
 
-      // padding-left: 6px;
-      // padding-bottom: 14px;
     }
 
     .ui-bottom-right {
       flex-grow: 1;
-      // padding-right: 6px;
       padding-top: 4px;
-
     }
 
   }
@@ -184,12 +174,7 @@ input, text, .numeric {
   flex-flow: column nowrap;
   align-items: center;
 
-  // position: absolute;
   margin: 0;
-  // box-sizing: border-box;
-
-  // bottom: 12px;
-  // left: 12px;
   padding: 1.5rem;
 
   background: rgba(255,255,255,0.9);
@@ -207,8 +192,8 @@ input, text, .numeric {
     margin-bottom: 6px;
   }
 
-  river-data-select-source {
-    margin-bottom: 1.5rem;
+  river-data-select-series {
+    margin-bottom: 2rem;
   }
 }
 
@@ -216,15 +201,10 @@ input, text, .numeric {
 #table {
   width: 464px;
   height: 100%;
-  // box-sizing: border-box;
-
-  // border: 1px solid saddlebrown;
   margin: 0;
 
   background: rgba(255,255,255,0.9);
-  // position: absolute;
-  // bottom: 300px;
-  // left: 12px;
+
 
   z-index: 10000;
 
@@ -234,18 +214,10 @@ input, text, .numeric {
 #timeseries {
   width: 100%;
   height: 292px;
-  // box-sizing: border-box;
   margin: 0;
 
-
-
   background: rgba(255,255,255,0.9);
-  // position: absolute;
-  // bottom: 12px;
-  // left: 476px;
-
   z-index: 10000;
-
   padding: 1rem;
 }
 
