@@ -144,8 +144,8 @@ input, text, .numeric {
     flex-grow: 1;
     width: 464px;
 
-    padding-bottom: 6px;
-    padding-left: 6px;
+    // padding-bottom: 6px;
+    // padding-left: 6px;
 
     river-table {
       height: 100%;
@@ -159,14 +159,18 @@ input, text, .numeric {
 
     .ui-bottom-left {
       flex-grow: 0;
-      padding-left: 6px;
-      padding-bottom: 14px;
+      padding-top: 4px;
+      padding-right: 4px;
+
+      // padding-left: 6px;
+      // padding-bottom: 14px;
     }
 
     .ui-bottom-right {
       flex-grow: 1;
-      padding-left: 6px;
-      padding-right: 6px;
+      // padding-right: 6px;
+      padding-top: 4px;
+
     }
 
   }
