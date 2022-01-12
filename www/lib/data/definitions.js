@@ -18,6 +18,8 @@ wet [0, 1]   AVG: 0 MEDIAN: 0
 
 import * as d3 from "d3";
 
+import sprintf from "sprintf";
+
 const interpolateBuYlRd = (x) => {
   return d3.interpolateRdYlBu(Math.abs(x - 1.0));
 }
@@ -64,5 +66,17 @@ const labels = {
   tss: "Total Suspended Solid"
 }
 
+const numericFormats = {
 
-export {scales, labels};
+}
+
+function formatValue(series, value) {
+  let fstr = numericFormats[series];
+  if(!fstr) {
+    fstr = "%.2f";
+  }
+  return sprintf(fstr, value);
+}
+
+
+export {scales, labels, formatValue};

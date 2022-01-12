@@ -11,8 +11,7 @@ import * as d3 from "d3";
 import {app} from '../state/app.js';
 import {model} from '../data/model.js';
 
-import {labels} from "../data/definitions.js";
-
+import {labels, formatValue} from "../data/definitions.js";
 
 
 @customElement('river-table')
@@ -22,20 +21,28 @@ class RiverTable extends observeState(LitElement) {
   }
 
   firstUpdated() {
-    // this.modal = M.Modal.init(this.modalEls, {})[0];
   }
 
   render() {
     let table = "";
 
     if(app.selectedSites.length > 0) {
-      for (key in labels) {
-        var name = labels[key];
+      table = "<table class='highlight'>";
+      table += '<thead><tr><th>Variable</th>';
+      if(app.selectedSites.length > 1) {
+        table += '<th>Last value (mean)<th>';
+      } else {
+        table += '<th>Last value<th>';
+      }
+
+      table += '</tr></thead>'
+      for(series in labels) {
+        var name = labels[series];
     
         let values = []
         for(i in app.selectedSites) {
           let site = app.selectedSites[i];
-          let val = model.getValue(site, key);
+          let val = model.getValue(site, series);
           if(val) {
             values.push(val);
           }
@@ -46,11 +53,12 @@ class RiverTable extends observeState(LitElement) {
         if(mean) {
           let tr = "<tr>";
           tr += "<td>" + name + "</td>";
-          tr += "<td>" + mean.toString() + "</td></tr>";
+          tr += "<td>" + formatValue(series, mean) + "</td></tr>";
       
           table += tr;
         }
       }
+      table += "</table>";
     }
 
     return html`
@@ -63,20 +71,4 @@ class RiverTable extends observeState(LitElement) {
       </div>
     `;
   }
-
-  // render() {
-  //   return html`
-  //     <div id="modal-table" class="modal">
-  //       <div class="modal-content">
-  //         <h4>Modal</h4>
-  //         <table class="highlight">
-  //           <tbody></tbody>
-  //         </table>
-  //       </div>
-  //       <div class="modal-footer">
-  //         <a class="modal-close waves-effect waves-green btn-flat">Close</a>
-  //       </div>
-  //     </div>
-  //   `;
-  // }
 }

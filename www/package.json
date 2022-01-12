@@ -22,6 +22,7 @@
     "katex": "^0.15.1",
     "leaflet": "^1.7.1",
     "lit": "^2.0.2",
+    "lit-element": "^2.4.0",
     "lit-element-state": "^1.7.0",
     "lodash": "^4.17.21",
     "materialize-css": "^1.0.0",
@@ -29,6 +30,7 @@
     "plotly": "^1.0.6",
     "plotly.js-dist": "^2.8.3",
     "seedrandom": "~2.4.3",
+    "sprintf": "^0.1.5",
     "timezone-abbr-offsets": "^1.0.2",
     "tippy.js": "^6.3.7"
   }
