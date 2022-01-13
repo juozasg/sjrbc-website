@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit'; 
+import {LitElement, html} from 'lit';
 import {customElement, queryAll, property} from 'lit/decorators.js';
 import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
@@ -24,6 +24,7 @@ class RiverTable extends observeState(LitElement) {
   }
 
   render() {
+    console.log('render table');
     let table = "";
 
     if(app.selectedSites.length > 0) {
@@ -38,7 +39,7 @@ class RiverTable extends observeState(LitElement) {
       table += '</tr></thead>'
       for(series in labels) {
         var name = labels[series];
-    
+
         let values = []
         for(i in app.selectedSites) {
           let site = app.selectedSites[i];
@@ -49,20 +50,30 @@ class RiverTable extends observeState(LitElement) {
         }
 
         let mean = d3.mean(values);
-        
+
         if(mean) {
           let tr = "<tr>";
           tr += "<td>" + name + "</td>";
           tr += "<td>" + formatValue(series, mean) + "</td></tr>";
-      
+
           table += tr;
         }
       }
       table += "</table>";
     }
 
+    // TODO: print table: | name | from date | to date |
+
+    let height = app.viewportHeight - 64 - 4;
+    if(app.showDataSelect || app.showTimeseries) {
+      height = height - document.getElementsByTagName('river-data-select')[0].height;
+    }
+
+    const width = document.getElementsByTagName('river-data-select')[0].width;
+    const style = `width: ${width}px; height: ${height}px;`
+
     return html`
-      <div id="table" class="card">
+      <div id="table" class="card" style="${style}">
       <h5>Site Summary</h5>
         <ul>
           ${_(app.selectedSites).map((site) => html`<li><b>${model.sites[site].siteName}</b></li>`)}

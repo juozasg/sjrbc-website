@@ -8,6 +8,21 @@ class AppState extends LitState {
   @stateVar() selectedSeries = 'ph';
   @stateVar() selectedSites = [];
 
+  @stateVar() viewportWidth = window.innerWidth;
+  @stateVar() viewportHeight = window.innerHeight;
+
+  constructor() {
+    super();
+
+    window.addEventListener('resize', () => this.updateViewportSize());
+  }
+
+  updateViewportSize() {
+    this.viewportWidth = window.innerWidth;
+    this.viewportHeight = window.innerHeight;
+    console.log(this.viewportWidth, this.viewportHeight);
+  }
+
   toggleSiteSelection(siteId) {
     console.log('select site', siteId);
     let sites = _(this.selectedSites);

@@ -16,6 +16,7 @@ raining [NaN, NaN]   AVG: 0 MEDIAN: 0
 wet [0, 1]   AVG: 0 MEDIAN: 0
 */
 
+
 import * as d3 from "d3";
 
 import sprintf from "sprintf";
@@ -67,13 +68,20 @@ const labels = {
 }
 
 const numericFormats = {
-
+  ecoli: "%d",
+  flow: "%d",
+  nitrates: "%.2f",
+  ph: "%.2f",
+  phosphorus: "%.2f",
+  spc: "%d",
+  tds: "%d"
 }
+
 
 function formatValue(series, value) {
   let fstr = numericFormats[series];
   if(!fstr) {
-    fstr = "%.2f";
+    fstr = "%.1f";
   }
   return sprintf(fstr, value);
 }

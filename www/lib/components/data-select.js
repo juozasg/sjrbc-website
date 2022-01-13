@@ -14,6 +14,9 @@ class RiverDataSelect extends LitElement {
   // @property({type: Object}) fromDate; // Date object
   // @property({type: Object}) toDate;
 
+  width = 464;
+  height = 292;
+
   createRenderRoot() {
     return this;
   }
@@ -23,9 +26,10 @@ class RiverDataSelect extends LitElement {
   }
 
   render() {
+    let style = `width: ${this.width}px; height: ${this.height}px;`
     return html`
 
-    <div class="card" id="data-select">
+    <div class="card" id="data-select" style="${style}">
       <river-data-select-series></river-data-select-series>
       <!-- <river-data-select-temporal></river-data-select-temporal> -->
       <river-data-select-legend></river-data-select-legend>
