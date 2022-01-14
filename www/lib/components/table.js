@@ -20,11 +20,33 @@ class RiverTable extends observeState(LitElement) {
     return this;
   }
 
-  firstUpdated() {
+  siteSummaryTable() {
+    if(app.selectedSites.length > 0) {
+      let table = "";
+      table = "<table class='striped' id='site-summary'>";
+      table += '<thead><tr>' +
+              '<th>Name</th>' +
+              '<th>Sample Count</th>' +
+              '<th>From</th>' +
+              '<th>To</th></tr><tbody>';
+
+      for(i in app.selectedSites) {
+        let site = app.selectedSites[i];
+        let name = model.sites[site].siteName;
+        let dates = model.sites[site].df.getSeries('date');
+
+        table += `<tr><td>${name}</td><td class='count'>${dates.count()}</td><td>${dates.first()}</td><td>${dates.last()}</td></tr>`
+      }
+
+      table += '</tbody></table>';
+
+      return table;
+    } else {
+      return "<i>No sites selected</i>"
+    }
   }
 
-  render() {
-    console.log('render table');
+  dataSummaryTable() {
     let table = "";
 
     if(app.selectedSites.length > 0) {
@@ -60,7 +82,14 @@ class RiverTable extends observeState(LitElement) {
         }
       }
       table += "</table>";
+      return table
+    } else {
+      return "<br/><i>Click sites to select</i>";
     }
+  }
+
+  render() {
+    console.log('render table');
 
     // TODO: print table: | name | from date | to date |
 
@@ -74,11 +103,9 @@ class RiverTable extends observeState(LitElement) {
 
     return html`
       <div id="table" class="card" style="${style}">
-      <h5>Site Summary</h5>
-        <ul>
-          ${_(app.selectedSites).map((site) => html`<li><b>${model.sites[site].siteName}</b></li>`)}
-        </ul>
-        ${unsafeHTML(table)}
+      <h5>Data Summary</h5>
+      ${unsafeHTML(this.siteSummaryTable())}
+      ${unsafeHTML(this.dataSummaryTable())}
       </div>
     `;
   }

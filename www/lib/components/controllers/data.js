@@ -78,7 +78,7 @@ export class DataController {
     return new Promise((resolve, reject) => {
       new Query({
         url: featureService,
-        limit: 5
+        // limit: 5
       }).run((error, featureCollection, response) => {
         if(error) {
           reject(new Error(`Failed to load: ${featureService}\nbecause ${JSON.stringify(error)}`));
