@@ -1,15 +1,20 @@
 import { LitState, stateVar } from 'lit-element-state';
 
 class AppState extends LitState {
-  @stateVar() showTable = true;
+  @stateVar() showTable = false;
   @stateVar() showDataSelect = true;
-  @stateVar() showTimeseries = false;
+  @stateVar() showTimeseries = true;
 
-  @stateVar() selectedSeries = 'ph';
+  @stateVar() selectedSeries = 'datainfo';
   @stateVar() selectedSites = [];
 
   @stateVar() viewportWidth = window.innerWidth;
   @stateVar() viewportHeight = window.innerHeight;
+
+  // {series: 'ph', sites: ['elkhart-001',...]}
+  @stateVar() leftTimeseries = {}
+  @stateVar() rightTimeseries = {}
+
 
   constructor() {
     super();

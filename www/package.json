@@ -27,7 +27,6 @@
     "lodash": "^4.17.21",
     "materialize-css": "^1.0.0",
     "papaparse": "^5.3.1",
-    "plotly": "^1.0.6",
     "plotly.js-dist": "^2.8.3",
     "seedrandom": "~2.4.3",
     "sprintf": "^0.1.5",

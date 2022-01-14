@@ -16,20 +16,23 @@ export class DataController {
 
   async load() {
     const loaders = []
-    loaders.push(
-      this.loadUSGSSites()
-        .then(d => model.processUSGSSites(d))
-        .then(() => this.loadUSGSSiteData())
-        .then(d => model.processUSGSSiteData(d))
-        .then(() => this.host.loading.loadedUSGS = true)
-        // .then(() => model.printStatistics())
-        .catch(e => this.host.loading.failure(e)));
+    // loaders.push(
+    //   this.loadUSGSSites()
+    //     .then(d => model.processUSGSSites(d))
+    //     .then(() => this.loadUSGSSiteData())
+    //     .then(d => model.processUSGSSiteData(d))
+    //     .then(() => this.host.loading.loadedUSGS = true)
+    //     // .then(() => model.printStatistics())
+    //     .catch(e => this.host.loading.failure(e)));
 
-    loaders.push(
-      this.loadElkhart()
-      .then(d => model.processElkhart(d))
-      .then(() => this.host.loading.loadedElkhart = true)
-      .catch(e => this.host.loading.failure(e)));
+    // loaders.push(
+    //   this.loadElkhart()
+    //   .then(d => model.processElkhart(d))
+    //   .then(() => this.host.loading.loadedElkhart = true)
+    //   .catch(e => this.host.loading.failure(e)));
+
+      this.host.loading.loadedUSGS = true;
+      this.host.loading.loadedElkhart = true;
 
     Promise.all(loaders).then(() => this.host.modelToLayers());
   }
