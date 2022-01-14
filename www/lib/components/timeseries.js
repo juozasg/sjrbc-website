@@ -51,18 +51,33 @@ class RiverTimeseries extends observeState(LitElement) {
       }],
     };
 
+    // https://plotly.com/javascript/multiple-axes/
     let data = this.prepData({});
     let layout = {
-        title: 'Time series with range slider and selectors',
-        xaxis: {
-            rangeselector: selectorOptions,
-            rangeslider: {}
-        },
-        yaxis: {
-            fixedrange: true
-        },
-        width: this.width - 2,
-        height: this.height - 2
+      xaxis: {
+        rangeselector: selectorOptions,
+        rangeslider: {}
+      },
+      yaxis: {
+        title: 'Total Dissolved Solids',
+        fixedrange: true
+      },
+      yaxis2: {
+        title: 'Total Dissolved Solids',
+        titlefont: {color: '#d62728'},
+        tickfont: {color: '#d62728'},
+        anchor: 'x',
+        overlaying: 'y',
+        side: 'right'
+      },
+      legend: true,
+      legend: {
+        x: 1,
+        y: 2.2,
+        // xanchor: 'right'
+      },
+      width: this.width - 2,
+      height: this.height - 2
     };
 
     // console.log(layout);
@@ -75,8 +90,8 @@ class RiverTimeseries extends observeState(LitElement) {
 
 
   prepData(rawData) {
-    var x = [0, 1, 2, 3];
-    var y = [10, 20, 11, 42];
+    // var x = [0, 1, 2, 3];
+    // var y = [10, 20, 11, 42];
 
     // rawData.forEach(function(datum, i) {
 
@@ -84,11 +99,23 @@ class RiverTimeseries extends observeState(LitElement) {
     //     y.push(datum[yField]);
     // });
 
-    return [{
-        mode: 'lines',
-        x: x,
-        y: y
-    }];
+
+    let trace1 = {
+      x: [1, 2, 3],
+      y: [40, 50, 42],
+      name: 'yaxis data',
+      type: 'scatter'
+    };
+
+    let trace2 = {
+      x: [2, 3, 4],
+      y: [0.4, 5, 20],
+      name: 'yaxis2 data',
+      yaxis: 'y2',
+      type: 'scatter'
+    };
+
+    return [trace1, trace2];
   }
 
 
