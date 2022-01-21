@@ -56,7 +56,10 @@ class RiverTimeseries extends observeState(LitElement) {
     let layout = {
       xaxis: {
         rangeselector: selectorOptions,
-        rangeslider: {}
+        rangeslider: {},
+        tickformat: "%H:%M\n%Y-%m-%d",
+        tickangle: 0,
+        tickfont: {size: 10}
       },
       yaxis: {
         title: 'Total Dissolved Solids',
@@ -72,7 +75,7 @@ class RiverTimeseries extends observeState(LitElement) {
       },
       legend: true,
       legend: {
-        x: 1,
+        x: 0,
         y: 2.2,
         // xanchor: 'right'
       },
@@ -85,7 +88,6 @@ class RiverTimeseries extends observeState(LitElement) {
     let config = {responsive: true}
 
     Plotly.react('plotly', data, layout, config);
-
   }
 
 
@@ -101,14 +103,16 @@ class RiverTimeseries extends observeState(LitElement) {
 
 
     let trace1 = {
-      x: [1, 2, 3],
+      // x: [1, 2, 3],
+      x: [new Date(Date.now() - 100000000), new Date(Date.now() - 200000000), new Date(Date.now() - 300000000)],
       y: [40, 50, 42],
       name: 'yaxis data',
       type: 'scatter'
     };
 
     let trace2 = {
-      x: [2, 3, 4],
+      // x: [2, 3, 4],
+      x: [new Date(Date.now() - 200000000), new Date(Date.now() - 300000000), new Date(Date.now() - 400000000)],
       y: [0.4, 5, 20],
       name: 'yaxis2 data',
       yaxis: 'y2',
