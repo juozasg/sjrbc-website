@@ -1,12 +1,17 @@
 import { LitState, stateVar } from 'lit-element-state';
 
+import {model} from '../data/model.js';
+
+
 class AppState extends LitState {
   @stateVar() showTable = false;
   @stateVar() showDataSelect = true;
   @stateVar() showTimeseries = true;
 
   @stateVar() selectedSeries = 'datainfo';
+  // @stateVar() selectedSeries = 'tss';
   @stateVar() selectedSites = [];
+  // @stateVar() selectedSites = ['elkhart-Horn-Ditch-CR-31', 'elkhart-Elkhart-River-CR-43'];
 
   @stateVar() viewportWidth = window.innerWidth;
   @stateVar() viewportHeight = window.innerHeight;
@@ -47,6 +52,24 @@ class AppState extends LitState {
 
   clearSelection() {
     this.selectedSites = [];
+  }
+
+
+  buildTimeseries() {
+    return {
+      seriesId: this.selectedSeries,
+      siteIds: [...this.selectedSites],
+      series: model.sitesMeanSeries(this.selectedSeries, this.selectedSites)
+    };
+  }
+
+
+  setLeftTimeseries() {
+    this.leftTimeseries = this.buildTimeseries();
+  }
+
+  setRightTimeseries() {
+    this.rightTimeseries = this.buildTimeseries();
   }
 }
 

@@ -53,9 +53,9 @@ class RiverToolbar extends observeState(LitElement) {
 
           <span class="text">${sitesSelectedText}${unsafeHTML(variableText)}</span>
           <span ?show=${app.selectedSeries != 'datainfo' && app.selectedSites.length > 0} class="selected-actions">
-            <span class="material-icons add-to-left">arrow_left</span>
+            <span @click="${() => app.setLeftTimeseries()}" class="material-icons add-to-left">arrow_left</span>
             <span class="material-icons timeline-hint">timeline</span>
-            <span class="material-icons add-to-right">arrow_right</span>
+            <span @click="${() => app.setRightTimeseries()}" class="material-icons add-to-right">arrow_right</span>
           <span>
         </span>
       </div>

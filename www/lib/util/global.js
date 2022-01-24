@@ -4,3 +4,5 @@ window.jQuery = jquery;
 
 import _ from 'lodash';
 window._ = _;
+
+window.log = console.log;

@@ -30,10 +30,25 @@ export class Model {
         return this.sites[siteId].datainfo;
       }
       let df = this.sites[siteId].df;
-      return df.getSeries(seriesId).last();
+      return df.getSeries(seriesId).bake().last();
     } catch (error) {
       return undefined;
     }
+  }
+
+  sitesMeanSeries(seriesId, siteIds) {
+    let allSeries = [];
+    siteIds.forEach(siteId => {
+      let series = this.sites[siteId].df.getSeries(seriesId);
+      if(series) {
+        allSeries.push(series);
+      }
+    });
+
+    let merged = df.Series.merge(allSeries);
+    let mean = merged.select(vals => _(vals).compact().mean()).bake();
+
+    return mean;
   }
 
   async processUSGSSites(data) {
@@ -118,7 +133,7 @@ export class Model {
         let dateStr = row[dateCol] + tzOffset;
 
         let columns = {
-          date: new Date(Date.parse(dateStr)),
+          date: Date.parse(dateStr),
           flow: parseFloat(row[flowCol]),
           height: parseFloat(row[heightCol])
         };
@@ -138,25 +153,26 @@ export class Model {
     // this.printStatistics();
   }
 
+  initElkhartSite(siteId, siteName, feature) {
+    feature.id = siteId;
+    let dframe = new df.DataFrame({columnNames: ['date'], rows: []}).setIndex('date');
+    this.sites[siteId] = {
+      dataset: 'elkhart',
+      siteId: siteId,
+      siteName: siteName,
+      lat: feature.geometry.coordinates[1],
+      lon: feature.geometry.coordinates[0],
+      feature: feature,
+      df: dframe,
+      datainfo: {
+        frequency: 'W',
+        lastObservation: 0
+      }
+    };
+  }
+
 
   async processElkhart(data) {
-    const columns = {
-      raining: "RAINING",// : "NA",
-      wet: "WET",//: "1",
-      temp: "TEMP",//: 13.6,
-      do: "DO",//: 10.1,
-      spc: "SPC",//: 346.2,
-      ph: "PH",//: 8.33,
-      nitrates: "NITRATES",//: 1.19,
-      phosphorus: "PHOSPHORUS",//: 0.008,
-      chlorides: "CHLORIDES",//: 33.42,
-      tds: "TDS",//: 380,
-      tss: "TSS",//: 2.14,
-      ecoli: "E__COLI",//: 83,
-      date: "DATE",//: 1462838400000,
-      current: "Current_"//: "Yes"
-    }
-
     data.features.forEach(feature => {
       let props = feature.properties;
       delete feature.properties;
@@ -164,22 +180,8 @@ export class Model {
       // "Christiana Creek - CR 4" -> "elkhart-Christiana-Creek-CR-4"
       const siteId = 'elkhart-' + safeID(props.Site_Location_Name);
       if(!this.sites[siteId]) {
-        feature.id = siteId;
-        let dframe = new df.DataFrame({columnNames: ['date'], rows: []}).setIndex('date');
-        this.sites[siteId] = {
-          dataset: 'elkhart',
-          siteId: siteId,
-          siteName: props.Site_Location_Name,
-          lat: feature.geometry.coordinates[1],
-          lon: feature.geometry.coordinates[0],
-          feature: feature,
-          df: dframe,
-          datainfo: {
-            frequency: 'W',
-            lastObservation: 0
-          }
-        };
-      }    
+        this.initElkhartSite(siteId, props.Site_Location_Name, feature);
+      }
 
       let columns = {
         raining: props["RAINING"],
@@ -194,22 +196,26 @@ export class Model {
         tds: props["TDS"],
         tss: props["TSS"],
         ecoli: props["E__COLI"],
-        date: new Date(props["DATE"]),
+        date: parseInt(props["DATE"]),
         current: props["Current_"]
       }
 
       let dframe = new df.DataFrame([columns]).setIndex('date')
-      this.sites[siteId].df = this.sites[siteId].df.merge(dframe).bake();
+      this.sites[siteId].df = this.sites[siteId].df.concat(dframe).bake();
     });
 
-    // find days since last observation
+  }
+
+  sortByDate() {
     let now = new Date(_.now());
-    _.mapValues(this.sites, (site) => {
-      let df = site.df;
+
+    for (const [id, site] of Object.entries(this.sites)) {
+      site.df = site.df.orderBy(row => row.date).bake();
+
       if(site.dataset == 'elkhart') {
-        site.datainfo.lastObservation = betweenDays(df.getSeries('date').last(), now);
+        site.datainfo.lastObservation = betweenDays(new Date(site.df.getSeries('date').last()), now);
       }
-    });
+    }
   }
 
   // turn all the sites into a geojson feature collection

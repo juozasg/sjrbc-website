@@ -50,21 +50,21 @@ const scales = {
 
 
 const labels = {
-  chlorides: "Chlorides",
+  chlorides: "Chlorides (mg/L)",
   // datainfo: "Chlorides",
-  do: "Dissolved Oxygen",
-  ecoli: "E. Coli",
+  do: "Dissolved Oxygen (mg/L)",
+  ecoli: "E. Coli (CFU)",
  
   flow: "Flow (ft^3/s)",
   height: "Height (ft)",
-  nitrates: "Nitrates",
+  nitrates: "Nitrates (mg/L)",
   ph: "pH",
  
-  phosphorus: "Phosphorus",
-  spc: "Specific Conductance",
-  tds: "Total Dissolved Solids",
+  phosphorus: "Phosphorus (mg/L)",
+  spc: "Specific Conductance (uS/cm)",
+  tds: "Total Dissolved Solids (mg/L)",
   temp: "Temperature (C)",
-  tss: "Total Suspended Solid"
+  tss: "Total Suspended Solids (mg/L)"
 }
 
 const numericFormats = {

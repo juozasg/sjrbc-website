@@ -30,7 +30,7 @@ class RiverTable extends observeState(LitElement) {
               '<th>From</th>' +
               '<th>To</th></tr><tbody>';
 
-      for(i in app.selectedSites) {
+      for(let i in app.selectedSites) {
         let site = app.selectedSites[i];
         let name = model.sites[site].siteName;
         let dates = model.sites[site].df.getSeries('date');
@@ -59,11 +59,11 @@ class RiverTable extends observeState(LitElement) {
       }
 
       table += '</tr></thead>'
-      for(series in labels) {
+      for(let series in labels) {
         var name = labels[series];
 
         let values = []
-        for(i in app.selectedSites) {
+        for(let i in app.selectedSites) {
           let site = app.selectedSites[i];
           let val = model.getValue(site, series);
           if(val) {

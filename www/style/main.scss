@@ -248,7 +248,19 @@ input, text, .numeric {
   overflow: hidden;
 
   // sorry plotly.js
-  .plotlyjsicon {
+  .plotlyjsicon, a[data-val='lasso'], a[data-val='select']  {
+    display: none;
+  }
+
+  .help {
+    padding: 1rem;
+    text-align: center;
+    .material-icons {
+      vertical-align: text-bottom;
+    }
+  }
+
+  div[hide] {
     display: none;
   }
 }

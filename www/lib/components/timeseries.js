@@ -3,6 +3,7 @@ import {customElement, property} from 'lit/decorators.js';
 import {observeState} from 'lit-element-state';
 
 import {app} from '../state/app.js';
+import {labels} from '../data/definitions.js';
 
 import Plotly from 'plotly.js-dist'
 
@@ -18,6 +19,9 @@ class RiverTimeseries extends observeState(LitElement) {
     // manually observe
     app.addObserver(() => this.updatePlotly(), ['leftTimeseries', 'rightTimeseries']);
     app.addObserver(() => this.requestUpdate(), ['showDataSelect', 'viewportWidth']);
+
+    // firstUpdate render twice to fix layout
+    this.updatePlotly();
   }
 
   updated() {
@@ -52,7 +56,7 @@ class RiverTimeseries extends observeState(LitElement) {
     };
 
     // https://plotly.com/javascript/multiple-axes/
-    let data = this.prepData({});
+    let data = this.prepareData();
     let layout = {
       xaxis: {
         rangeselector: selectorOptions,
@@ -62,28 +66,32 @@ class RiverTimeseries extends observeState(LitElement) {
         tickfont: {size: 10}
       },
       yaxis: {
-        title: 'Total Dissolved Solids',
-        fixedrange: true
+        title: labels[app.leftTimeseries.seriesId],
+        fixedrange: false,
+        color: '#d81b60'
       },
       yaxis2: {
-        title: 'Total Dissolved Solids',
-        titlefont: {color: '#d62728'},
-        tickfont: {color: '#d62728'},
+        title: labels[app.rightTimeseries.seriesId],
+        titlefont: {color: '#33691e'},
+        tickfont: {color: '#ccccc'},
         anchor: 'x',
         overlaying: 'y',
-        side: 'right'
+        side: 'right',
+        fixedrange: false
       },
       legend: true,
       legend: {
         x: 0,
-        y: 2.2,
+        y: 1.53,
         // xanchor: 'right'
       },
       width: this.width - 2,
-      height: this.height - 2
+      height: this.height - 2,
+      margin: {
+        autoexpand: false,
+        t: 75
+      }
     };
-
-    // console.log(layout);
 
     let config = {responsive: true}
 
@@ -91,35 +99,55 @@ class RiverTimeseries extends observeState(LitElement) {
   }
 
 
-  prepData(rawData) {
-    // var x = [0, 1, 2, 3];
-    // var y = [10, 20, 11, 42];
+  prepareData() {
+    let leftData = {};
+    let rightData = {};
 
-    // rawData.forEach(function(datum, i) {
+    if(app.leftTimeseries.series) {
+      leftData = this.prepareTimeseriesData(app.leftTimeseries);
+      leftData.marker.color = '#d81b60';
+    }
 
-    //     x.push(new Date(datum[xField]));
-    //     y.push(datum[yField]);
-    // });
+    if(app.rightTimeseries.series) {
+      rightData = this.prepareTimeseriesData(app.rightTimeseries);
+      rightData.marker.color = '#33691e';
+      rightData.yaxis = 'y2';
+    }
 
+    console.log(leftData, rightData);
+    return [leftData, rightData];
+  }
 
-    let trace1 = {
-      // x: [1, 2, 3],
-      x: [new Date(Date.now() - 100000000), new Date(Date.now() - 200000000), new Date(Date.now() - 300000000)],
-      y: [40, 50, 42],
-      name: 'yaxis data',
-      type: 'scatter'
+  prepareTimeseriesData(ts) {
+    let xs =_.map(ts.series.getIndex().toArray(), d => new Date(d));
+    let ys = ts.series.toArray();
+    let name = this.legendText(ts.seriesId, ts.siteIds);
+
+    let data = {
+      x: xs,
+      y: ys,
+      name: name,
+      type: 'scatter',
+      marker: {
+        color: "#ccc",
+      }
+
     };
 
-    let trace2 = {
-      // x: [2, 3, 4],
-      x: [new Date(Date.now() - 200000000), new Date(Date.now() - 300000000), new Date(Date.now() - 400000000)],
-      y: [0.4, 5, 20],
-      name: 'yaxis2 data',
-      yaxis: 'y2',
-      type: 'scatter'
-    };
+    return data;
+  }
 
-    return [trace1, trace2];
+  legendText(seriesId, siteIds) {
+    let text = "";
+    if(siteIds.length == 1) {
+      text += model.sites[siteIds[0]].siteName;
+    } else if(siteIds.length > 1) {
+      text += `${siteIds.length} sites (mean)`;
+    }
+
+    text += ` - ${labels[seriesId]}`;
+
+    return text;
   }
 
 
@@ -133,10 +161,14 @@ class RiverTimeseries extends observeState(LitElement) {
     }
     const style = `width: ${this.width}px; height: ${this.height}px;`
 
+    const hidePlotly = !app.leftTimeseries.series && !app.rightTimeseries.series;
+
     return html`
     <div id="timeseries" class="card" style="${style}">
-      <div id="plotly"></div>
-      <!-- <h5>Select sites and click <- or -> to add</h5> -->
+    <div class="help" ?hide=${!hidePlotly}>
+      <h5>Select sites, choose a variable and click <span class="material-icons">arrow_left</span> or <span class="material-icons">arrow_right</span> to graph</h5>
+    </div>
+    <div ?hide=${hidePlotly} id="plotly"></div>
     </div>
     `;
   }
