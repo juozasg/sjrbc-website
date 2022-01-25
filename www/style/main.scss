@@ -18,6 +18,10 @@ input, text, .numeric {
   // font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   color: #323232;
+
+  path[fill-opacity='0'] {
+    pointer-events: none !important;
+  }
 }
 
 .label {

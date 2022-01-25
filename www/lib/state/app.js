@@ -41,10 +41,7 @@ class AppState extends LitState {
     } else {
       this.selectedSites = sites.concat(siteId).clone();
     }
-
-    console.log('selectedSites: ', this.selectedSites);
   }
-
 
   siteIsSelected(siteId) {
     return _(this.selectedSites).includes(siteId);
@@ -53,7 +50,6 @@ class AppState extends LitState {
   clearSelection() {
     this.selectedSites = [];
   }
-
 
   buildTimeseries() {
     return {

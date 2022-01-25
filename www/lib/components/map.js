@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit'; 
+import {LitElement, html} from 'lit';
 import {customElement, property, query} from 'lit/decorators.js';
 import {observeState, stateRecorder} from 'lit-element-state';
 
@@ -26,7 +26,7 @@ class RiverMap extends observeState(LitElement) {
 
   apiKey = "AAPK3dfaa40a13c0404983142c26b566596ammsJLVROPRkVaZnrwj6bYIrYdi4FEikx7NZpYg7f5M9XlV2RFL6PgxMA_56IceHv";
   data = new DataController(this);
-  
+
   createRenderRoot() {
     return this;
   }
@@ -42,7 +42,7 @@ class RiverMap extends observeState(LitElement) {
     this.featureLayer.setStyle((feature) => {
       let value = model.getValue(feature.id, app.selectedSeries);
       if(!value) {
-        return {fillOpacity:0, stroke: false};
+        return {fillOpacity:0, stroke: false, className: 'nope'};
       }
 
       let color, radius;
@@ -50,7 +50,7 @@ class RiverMap extends observeState(LitElement) {
       if(app.selectedSeries == 'datainfo') {
         let frequency = value.frequency;
         let daysSince = value.lastObservation;
-        
+
         let colorScale = scales[app.selectedSeries];
         color = colorScale(daysSince);
 
@@ -81,7 +81,8 @@ class RiverMap extends observeState(LitElement) {
         dashArray: selected ? '3 6' : null,
         // dashOffset: 14,
         fillOpacity: 0.9,
-        radius: radius
+        radius: radius,
+        className: 'markerVisible'
       }
     });
   }
@@ -133,9 +134,13 @@ class RiverMap extends observeState(LitElement) {
 
     this.featureLayer = new GeoJSON(this.featureCollection,{
       pointToLayer: (feature, latlng) => {
-        return L.circleMarker(latlng).on('click', () => {
+        let marker = L.circleMarker(latlng);
+
+        marker.on('click', (e) => {
           app.toggleSiteSelection(feature.id);
         });
+
+        return marker;
       }
     }).addTo(this.map);
 

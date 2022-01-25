@@ -114,7 +114,6 @@ class RiverTimeseries extends observeState(LitElement) {
       rightData.yaxis = 'y2';
     }
 
-    console.log(leftData, rightData);
     return [leftData, rightData];
   }
 
