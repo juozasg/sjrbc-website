@@ -10,3 +10,9 @@ export function betweenDays(startDate, endDate) {
   
     return (start - end) / oneDay;
 }
+
+export function oneMonthAgo() {
+  const oneDay = 1000 * 60 * 60 * 24;
+  const oneMonth = oneDay * 30;
+  return (Date.now() - oneMonth);
+}

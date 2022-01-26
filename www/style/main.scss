@@ -8,6 +8,9 @@ input, text, .numeric {
   font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 }
 
+.error-text {
+  user-select: all;
+}
 
 #map {
   position: absolute;

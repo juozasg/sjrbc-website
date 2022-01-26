@@ -1,13 +1,13 @@
-import { FeatureLayer, Query } from "esri-leaflet";
+import {FeatureLayer, Query} from "esri-leaflet";
 
 import {model} from  "../../data/model.js";
 
 import strftime from "../../util/strftime.js"
+import {oneMonthAgo} from "../../util/data-helpers.js"
 
-
+// used by river-map to fetch and load the datasets and control the loading screen
 export class DataController {
-  elkhart = {}
-  usgs = {}
+  usgsStationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
 
   constructor(host) {
     this.host = host;
@@ -39,41 +39,49 @@ export class DataController {
     .then(() => this.host.modelToLayers());
   }
 
-  async loadUSGSSites() {
-    // const huc8 = '04050001';
-    const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
-    // const stationIds = '04096405';//,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
-    //const annualUrl = 'https://waterdata.usgs.gov/nwis/annual?referred_module=sw&amp;site_no=04096405&amp;por_04096405_70388=891343,00060,70388,1963,2022&amp;year_type=W&amp;format=rdb&amp;date_format=YYYY-MM-DD&amp;rdb_compression=value&amp;submitted_form=parameter_selection_list';
-    const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${stationIds}&siteStatus=all`;
-
+  async fetchAndParse(url, json) {
     return fetch(url)
       .then(response => {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
-        return response.json();
+        if(json) {
+          return response.json();
+        } else {
+          return response.text();
+        }
       })
       .catch(e => {throw new Error(`Failed to load: ${url}\nbecause ${e.message}`)});
   }
 
+  async fetchJSON(url) {
+    return this.fetchAndParse(url, true);
+  }
+
+  async fetchText(url) {
+    return this.fetchAndParse(url, false);
+  }
+
+  async loadUSGSSites() {
+    const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${this.usgsStationIds}&siteStatus=all`;
+    return this.fetchJSON(url);
+  }
+
   async loadUSGSSiteData() {
-    // const huc8 = '04050001';
-    const stationIds = '04096405,04096515,04097500,040975299,04097540,04099000,04100500,04101000,04101500,04101535,04101800,04102500,04099750';
-    // const stationIds = '04096405';
-    //const annualUrl = 'https://waterdata.usgs.gov/nwis/annual?referred_module=sw&amp;site_no=04096405&amp;por_04096405_70388=891343,00060,70388,1963,2022&amp;year_type=W&amp;format=rdb&amp;date_format=YYYY-MM-DD&amp;rdb_compression=value&amp;submitted_form=parameter_selection_list';
-    const startDate = '2021-12-30';
-    const endDate = strftime('%F', new Date(Date.now()));
+    const startDate = '2000-01-01';
+    const monthAgoDate = strftime('%F', new Date(oneMonthAgo()));
+    const nowDate = strftime('%F', new Date(Date.now()));
 
-    const url = `https://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=${stationIds}&parameterCd=00060,00065&siteStatus=all&startDT=${startDate}&endDT=${endDate}`;
+    const dailiesUrl = `https://waterservices.usgs.gov/nwis/dv/?format=rdb&sites=${this.usgsStationIds}&statCd=00003&siteStatus=all&startDT=${startDate}&endDT=${monthAgoDate}`;
+    const ivUrl = `https://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=${this.usgsStationIds}&parameterCd=00060,00065&siteStatus=all&startDT=${monthAgoDate}&endDT=${nowDate}`;
 
-    return fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.text()
-      })
-      .catch(e => {throw new Error(`Failed to load: ${url}\nbecause ${e.message}`)})
+    const loadDailies = this.fetchText(dailiesUrl);
+    const loadIV = this.fetchText(ivUrl);
+
+    return Promise.all([loadDailies, loadIV]).then((results) => {
+      return results[0] + "\n" + results[1]
+    });
+
   }
 
   async loadElkhart() {

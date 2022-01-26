@@ -47,8 +47,8 @@ class RiverDataSelectSeries extends observeState(LitElement) {
         <li><a @click="${() => this.selected('env', 'temp')}" id="">Temperature</a></li>
         <li><a @click="${() => this.selected('env', 'spc')}" id="">Specific Conductance</a></li>
         <li><a @click="${() => this.selected('env', 'do')}" id="">Disolved Oxygen</a></li>
-        <li><a @click="${() => this.selected('env', 'tds')}" id="">Total Dissolved Solids (mg/L)</a></li>
-        <li><a @click="${() => this.selected('env', 'tss')}" id="">Total Suspended Solids (mg/L)</a></li>
+        <li><a @click="${() => this.selected('env', 'tds')}" id="">Total Dissolved Solids</a></li>
+        <li><a @click="${() => this.selected('env', 'tss')}" id="">Total Suspended Solids</a></li>
 
         <li class="divider" tabindex="-1"></li>
 

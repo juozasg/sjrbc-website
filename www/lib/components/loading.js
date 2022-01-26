@@ -78,7 +78,7 @@ class RiverLoading extends LitElement {
           <div id="datalist">
             ${usgs}
             ${elkhart}
-            <pre style="overflow: auto" class="pink-text text-darken-2">${this.failures}</pre>
+            <pre style="overflow: auto" class="error-text pink-text text-darken-2">${this.failures}</pre>
           </div>
         </div>
         <div class="modal-footer">
