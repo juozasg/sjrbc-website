@@ -89,68 +89,93 @@ export class Model {
       }
     });
 
-    // console.log(this.sites);
-
-
   }
 
   async processUSGSSiteData(data) {
-    // let t1 = timer('USGS Papa parse')
+    let section = '';
+    data.split("\n").forEach((l) => {
+      if(l[0] == '#') {
+        if(section.length > 0) {
+          this.processUSGSSiteDataSection(section);
+          section = '';
+        }
+      } else {
+        section = section + l + "\n";
+      }
+    });
 
+  }
+
+  processUSGSSiteDataSection(data) {
+    // log(data);
     let rows = Papa.parse(data, {
       delimiter: "\t",
       comments: "#"
     }).data;
 
-    // t1.stop();
-
-    // TODO: multi-section, multivar parsing
-    // may not work with all sites
-    // each TS_ID section in the RDB data should be parsed separately
-    // and columns calculated from the headers
-    // this would allow to include 00010 (water temperature) for those sites
-    // which have it
     const agencyCol = 0;
     const siteCol = 1;
     const dateCol = 2;
-    const tzCol = 3;
-    const flowCol = 4; // "TS_ID_00060"
-    const heightCol = 6; // "TS_ID_00065"
+    let tzCol;
+    let flowCol;
+    let heightCol;
 
+    // Example:
+    // ['agency_cd', 'site_no', 'datetime', 'tz_cd', '71793_00060', '71793_00060_cd', '71794_00065', '71794_00065_cd']
+    // ['agency_cd', 'site_no', 'datetime', '294474_00060_00003', '294474_00060_00003_cd']
+    for(let i in rows[0]) {
+      let colname = rows[0][i];
+      if(colname == 'tz_cd' ) {
+        tzCol = i;
+      } else if (/\d+_00060$/.test(colname)) {
+        flowCol = i;
+      } else if (/\d+_00060_00003$/.test(colname)) {
+        flowCol = i;
+      } else if (/\d+_00065$/.test(colname)) {
+        heightCol = i;
+      }
+    }
 
-    const siteDfCols = {}
+    const dfCols = [];
+    let siteId;
 
-    // let t2 = timer('USGS build df');
     rows.forEach(row => {
       // some rows have headers
       if(row[agencyCol] != 'USGS') {
         return;
       }
 
-      let siteId = 'usgs-' + row[siteCol];
+      siteId = 'usgs-' + row[siteCol];
       if(this.sites[siteId]) {
-        let tzOffset = tzAbbr[row[tzCol]];
+        let tzOffset = 'EST'
+        if(tzCol) {
+          tzOffset = tzAbbr[row[tzCol]];
+        }
         let dateStr = row[dateCol] + tzOffset;
 
         let columns = {
           date: Date.parse(dateStr),
-          flow: parseFloat(row[flowCol]),
-          height: parseFloat(row[heightCol])
+
         };
 
-        if(!siteDfCols[siteId]) {
-          siteDfCols[siteId] = [];
+        if(flowCol) {
+          columns.flow = parseFloat(row[flowCol]) || 0.0;
         }
 
-        siteDfCols[siteId].push(columns);
+        if(heightCol) {
+          columns.height = parseFloat(row[heightCol]) || 0.0;
+        }
+
+        if(flowCol || heightCol) {
+          dfCols.push(columns);
+        }
       }
     });
 
-    for (const [siteId, dfCols] of Object.entries(siteDfCols)) {
-      let dframe = new df.DataFrame(dfCols).setIndex('date')
-      this.sites[siteId].df = this.sites[siteId].df.concat(dframe).bake();
-    }
-    // this.printStatistics();
+    // log(siteId, dfCols);
+
+    let dframe = new df.DataFrame(dfCols).setIndex('date')
+    this.sites[siteId].df = this.sites[siteId].df.concat(dframe).bake();
   }
 
   initElkhartSite(siteId, siteName, feature) {
